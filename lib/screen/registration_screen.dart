@@ -1,0 +1,223 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:college360/constant.dart';
+import 'package:college360/components/C_login_registration.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:college360/services/authentication_Service.dart';
+
+class RegistrationScreen extends StatefulWidget {
+  static const String id = 'registration_screen';
+
+  @override
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  final List<String> genderItems = [
+    'Male',
+    'Female',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: KBackGroundColor,
+      appBar: AppBar(
+        titleSpacing: 20,
+        automaticallyImplyLeading: false,
+        backgroundColor: KBackGroundColor,
+        elevation: 0,
+        title: Container(
+          padding: EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+              border:
+                  Border(bottom: BorderSide(color: Colors.white, width: 1))),
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 30,
+                letterSpacing: 1.0,
+              ),
+              children: [
+                TextSpan(
+                  text: 'Sign',
+                  style: TextStyle(
+                      fontFamily: 'PlayfairDisplay',
+                      color: Color(0xffD8D3D6),
+                      fontWeight: FontWeight.w900,
+                      fontStyle: FontStyle.italic),
+                ),
+                TextSpan(text: ' UP', style: TextStyle(color: KActionColor))
+              ],
+            ),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: ListView(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        children: [
+                          SignButton(
+                              label: ' Add Profile Picture',
+                              buttonColor: Colors.white10,
+                              textColor: Colors.white,
+                              onPressed: () {}),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Icon(
+                            CupertinoIcons.profile_circled,
+                            size: 70,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RegisterField(
+                              label: 'First Name',
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Expanded(
+                            child: RegisterField(
+                              label: 'Last Name',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      RegisterField(
+                        label: 'E-Mail',
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      RegisterField(
+                        label: 'Password',
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: RegisterField(
+                              label: 'Student-ID',
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          //gender Drop down button
+                          Expanded(
+                            child: Material(
+                              color: KBackGroundColor,
+                              elevation: 2,
+                              borderRadius: KBorderRadius,
+                              child: DropdownButtonFormField2(
+                                onChanged: (value) {},
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                      borderRadius: KBorderRadius),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: KBorderRadius,
+                                    borderSide: BorderSide(color: KActionColor),
+                                  ),
+
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderRadius: KBorderRadius,
+                                  ),
+
+                                  //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                ),
+                                isExpanded: true,
+                                hint: const Text(
+                                  'Gender',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.white70,
+                                ),
+                                buttonDecoration: BoxDecoration(
+                                  borderRadius: KBorderRadius,
+                                ),
+                                iconSize: 30,
+                                buttonHeight: 60,
+                                buttonPadding:
+                                    const EdgeInsets.only(left: 20, right: 10),
+                                dropdownDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
+                                ),
+                                items: genderItems
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Please select gender.';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      SignButton(
+                        label: 'SIGN UP',
+                        buttonColor: KActionColor,
+                        textColor: Colors.black,
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {}
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "421434419723",
+    "project_id": "college360-e87b7",
+    "storage_bucket": "college360-e87b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421434419723:android:b613968df252bbc463350e",
+        "android_client_info": {
+          "package_name": "com.example.college360"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421434419723-7bld59ep98omjk4him601aabhdb95g6g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-4mnd46Mqf7JDb1BOfZBVozW9EahrT0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421434419723-7bld59ep98omjk4him601aabhdb95g6g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
