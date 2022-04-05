@@ -45,7 +45,7 @@ class SignButton extends StatelessWidget {
 }
 
 class RegisterField extends StatelessWidget {
-  const RegisterField({required this.label,this.validator});
+  const RegisterField({required this.label, this.validator});
   final String label;
   final FormFieldValidator validator;
 
@@ -56,7 +56,6 @@ class RegisterField extends StatelessWidget {
       elevation: 2,
       borderRadius: KBorderRadius,
       child: TextFormField(
-        validator: ,
         onChanged: (val) {},
         cursorColor: Colors.white,
         decoration: InputDecoration(
