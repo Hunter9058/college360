@@ -45,24 +45,38 @@ class SignButton extends StatelessWidget {
 }
 
 class RegisterField extends StatelessWidget {
-  const RegisterField({required this.label, this.validator});
+  RegisterField(
+      {required this.label,
+      required this.onChanged,
+      required this.validator,
+      this.autoValidateMode = AutovalidateMode.disabled});
   final String label;
-  final FormFieldValidator validator;
+  final dynamic onChanged;
+  final dynamic validator;
+  AutovalidateMode autoValidateMode;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: KBackGroundColor,
-      elevation: 2,
+      elevation: 0,
       borderRadius: KBorderRadius,
       child: TextFormField(
-        onChanged: (val) {},
+        autovalidateMode: autoValidateMode,
+        validator: (validator),
+        onChanged: onChanged,
         cursorColor: Colors.white,
         decoration: InputDecoration(
             labelText: '$label',
             floatingLabelStyle: TextStyle(
               color: Colors.white,
             ),
+            errorBorder: OutlineInputBorder(
+                borderRadius: KBorderRadius,
+                borderSide: BorderSide(color: Colors.red)),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: KActionColor),
+                borderRadius: KBorderRadius),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
                 borderRadius: KBorderRadius),
@@ -73,5 +87,37 @@ class RegisterField extends StatelessWidget {
             )),
       ),
     );
+  }
+}
+
+//password verification
+String? isPasswordCompliant(String password, [int minLength = 6]) {
+  if (password.isEmpty) {
+    return 'please enter password';
+  }
+
+  bool hasUppercase = password.contains(new RegExp(r'[A-Z]'));
+  bool hasDigits = password.contains(new RegExp(r'[0-9]'));
+  bool hasLowercase = password.contains(new RegExp(r'[a-z]'));
+  bool hasSpecialCharacters =
+      password.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+  bool hasMinLength = password.length > minLength;
+
+  if (hasDigits == false) {
+    return 'Password must contain a number';
+  }
+  if (hasUppercase == false) {
+    return 'Password must contain uppercase';
+  }
+  if (hasLowercase == false) {
+    return 'Password must contain lowercase';
+  }
+  if (hasSpecialCharacters == false) {
+    return 'Password must contain special characters';
+  }
+  if (hasMinLength == false) {
+    return 'Password must be longer than 8 characters';
+  } else {
+    return null;
   }
 }

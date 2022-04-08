@@ -13,12 +13,19 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final AuthService _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
+  String firstName = '';
+  String lastName = '';
+  String eMail = '';
+  String password = '';
+  String studentId = '';
   final List<String> genderItems = [
     'Male',
     'Female',
   ];
+  late String selectedGender;
+
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +99,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: [
                           Expanded(
                             child: RegisterField(
+                              validator: (val) => val.isEmpty
+                                  ? 'please enter First name'
+                                  : null,
                               label: 'First Name',
+                              onChanged: (val) {
+                                firstName = val;
+                                print(firstName);
+                              },
                             ),
                           ),
                           SizedBox(
@@ -100,7 +114,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Expanded(
                             child: RegisterField(
+                              validator: (val) =>
+                                  val.isEmpty ? 'please enter last name' : null,
                               label: 'Last Name',
+                              onChanged: (val) {
+                                lastName = val;
+                                print(lastName);
+                              },
                             ),
                           ),
                         ],
@@ -109,13 +129,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         height: 30,
                       ),
                       RegisterField(
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'This field is required';
+                          }
+
+                          // using regular expression
+                          if (!RegExp(r'\S+@\S+\.\S+').hasMatch(val)) {
+                            return "Please enter a valid email address";
+                          }
+                        },
                         label: 'E-Mail',
+                        onChanged: (val) {
+                          eMail = val;
+                          print(eMail);
+                        },
                       ),
                       SizedBox(
                         height: 30,
                       ),
                       RegisterField(
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (val) {
+                          return isPasswordCompliant(val);
+                        },
                         label: 'Password',
+                        onChanged: (val) {
+                          password = val;
+                          print(password);
+                        },
                       ),
                       SizedBox(
                         height: 30,
@@ -124,7 +166,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: [
                           Expanded(
                             child: RegisterField(
+                              validator: (val) {
+                                if (val.length != 8) {
+                                  return 'ID to short';
+                                }
+                              },
                               label: 'Student-ID',
+                              onChanged: (val) {
+                                studentId = val;
+                                print(studentId);
+                              },
                             ),
                           ),
                           SizedBox(
@@ -137,7 +188,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               elevation: 2,
                               borderRadius: KBorderRadius,
                               child: DropdownButtonFormField2(
-                                onChanged: (value) {},
+                                onChanged: (value) {
+                                  selectedGender = value.toString();
+                                  print(selectedGender);
+                                },
+                                validator: (val) => val.toString().isEmpty
+                                    ? 'Please pick a gender'
+                                    : null,
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                       borderSide:
@@ -188,12 +245,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           ),
                                         ))
                                     .toList(),
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Please select gender.';
-                                  }
-                                  return null;
-                                },
                               ),
                             ),
                           )
@@ -207,7 +258,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         buttonColor: KActionColor,
                         textColor: Colors.black,
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {}
+                          if (_formKey.currentState!.validate()) {
+                            print('form valid');
+                          }
                         },
                       ),
                     ],
