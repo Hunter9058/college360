@@ -13,6 +13,8 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  String error = '';
+
   String firstName = '';
   String lastName = '';
   String eMail = '';
@@ -98,13 +100,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child: RegisterField(
+                            child: RegisterInputField(
                               validator: (val) => val.isEmpty
                                   ? 'please enter First name'
                                   : null,
                               label: 'First Name',
                               onChanged: (val) {
                                 firstName = val;
+                                //todo take firstname
                                 print(firstName);
                               },
                             ),
@@ -113,12 +116,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             width: 30,
                           ),
                           Expanded(
-                            child: RegisterField(
+                            child: RegisterInputField(
                               validator: (val) =>
                                   val.isEmpty ? 'please enter last name' : null,
                               label: 'Last Name',
                               onChanged: (val) {
                                 lastName = val;
+                                //todo take last name
                                 print(lastName);
                               },
                             ),
@@ -128,27 +132,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       SizedBox(
                         height: 30,
                       ),
-                      RegisterField(
+                      RegisterInputField(
                         validator: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'This field is required';
-                          }
-
-                          // using regular expression
-                          if (!RegExp(r'\S+@\S+\.\S+').hasMatch(val)) {
-                            return "Please enter a valid email address";
-                          }
+                          return isEmailValid(val);
                         },
                         label: 'E-Mail',
                         onChanged: (val) {
                           eMail = val;
-                          print(eMail);
                         },
                       ),
                       SizedBox(
                         height: 30,
                       ),
-                      RegisterField(
+                      RegisterInputField(
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         validator: (val) {
                           return isPasswordCompliant(val);
@@ -156,7 +152,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         label: 'Password',
                         onChanged: (val) {
                           password = val;
-                          print(password);
                         },
                       ),
                       SizedBox(
@@ -165,7 +160,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child: RegisterField(
+                            child: RegisterInputField(
+                              autoValidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               validator: (val) {
                                 if (val.length != 8) {
                                   return 'ID to short';
@@ -259,7 +256,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         textColor: Colors.black,
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            print('form valid');
+                            dynamic result = await _auth
+                                .registerWithEmailAndPassword(eMail, password);
+                            //todo add account already exist warning
+                            if (result == null) {
+                              AlertDialog(
+                                title: Text('Warning'),
+                                content: Text('Please verify your information'),
+                              );
+                            }
                           }
                         },
                       ),

@@ -8,12 +8,15 @@ import 'package:college360/components/C_login_registration.dart';
 
 class SignIn extends StatefulWidget {
   static const String id = 'login_screen';
-  final AuthService _auth = AuthService();
 
   State<SignIn> createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
+  String email = '';
+  String password = '';
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
   bool isPassVisible = true;
   bool isfinished = false;
   Color forgotColor = Color(0xffAFD4E2);
@@ -26,6 +29,7 @@ class _SignInState extends State<SignIn> {
       body: Container(
         padding: EdgeInsets.only(top: 130, left: 30, right: 30),
         child: Form(
+          key: _formKey,
           child: Column(
             children: <Widget>[
               //title (logo,text)
@@ -74,40 +78,58 @@ class _SignInState extends State<SignIn> {
                 ],
               ),
               SizedBox(height: 50),
-              InputField(
+              //todo update with the input field field instead
+              //todo add icon argument and use with password field
+
+              LoginInputField(
+                obscureText: false,
                 hintText: 'E-mail',
+                validator: (val) {
+                  return isEmailValid(val);
+                },
+                onChanged: (val) {
+                  email = val;
+                },
               ),
               SizedBox(height: 20.0),
-              TextFormField(
-                cursorColor: KActionColor,
-                decoration: (InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: KActionColor)),
-                    hintText: ('Password'),
-                    suffixIcon: IconButton(
-                      color: Colors.grey,
-                      onPressed: () {
-                        isPassVisible
-                            ? isPassVisible = false
-                            : isPassVisible = true;
-                        setState(() {});
-                      },
-                      icon: isPassVisible
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility),
-                    ))),
-                onChanged: (val) {}, //password
+              LoginInputField(
                 obscureText: isPassVisible,
+                hintText: 'Password',
+                validator: (val) {
+                  return isPasswordCompliant(val);
+                },
+                onChanged: (val) {
+                  password = val;
+                },
+                suffixIcon: IconButton(
+                  color: Colors.grey,
+                  onPressed: () {
+                    isPassVisible
+                        ? isPassVisible = false
+                        : isPassVisible = true;
+                    setState(() {});
+                  },
+                  icon: isPassVisible
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility),
+                ),
               ),
+
               SizedBox(height: 40.0),
               SignButton(
                 textColor: Colors.black,
                 buttonColor: KActionColor,
                 label: 'SIGN IN',
-                onPressed: () {
-                  setState(() {
-                    Navigator.pushNamed(context, HomeScreen.id);
-                  });
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    dynamic result =
+                        await _auth.signInWithEmailAndPassword(email, password);
+                    if (result == null) {
+                      showAlertDialog(context);
+                    } else {
+                      Navigator.pushNamed(context, HomeScreen.id);
+                    }
+                  }
                 },
               ),
 
@@ -118,13 +140,13 @@ class _SignInState extends State<SignIn> {
                 label: 'SIGN UP',
                 buttonColor: Color(0xff1c1c1e),
                 textColor: Colors.white,
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
                     Navigator.pushNamed(context, RegistrationScreen.id);
                   });
                 },
               ),
-
+              //todo add password recovery by email screen
               TextButton(
                 onPressed: () {}, //redirect to retrieve screen
                 child: Text(

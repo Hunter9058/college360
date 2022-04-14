@@ -1,19 +1,32 @@
+import 'package:college360/screen/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
 
-class InputField extends StatelessWidget {
-  const InputField({required this.hintText});
+class LoginInputField extends StatelessWidget {
+  const LoginInputField(
+      {required this.hintText,
+      required this.onChanged,
+      this.suffixIcon,
+      this.validator,
+      this.obscureText = true});
+  final dynamic obscureText;
   final String hintText;
+  final dynamic onChanged;
+  final dynamic suffixIcon;
+  final dynamic validator;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
+      validator: (validator),
       cursorColor: KActionColor,
       decoration: InputDecoration(
+        suffixIcon: suffixIcon,
         hintText: ('$hintText'),
         focusedBorder:
             UnderlineInputBorder(borderSide: BorderSide(color: KActionColor)),
       ),
-      onChanged: (val) {},
+      obscureText: obscureText,
     );
   }
 }
@@ -44,8 +57,8 @@ class SignButton extends StatelessWidget {
   }
 }
 
-class RegisterField extends StatelessWidget {
-  RegisterField(
+class RegisterInputField extends StatelessWidget {
+  RegisterInputField(
       {required this.label,
       required this.onChanged,
       required this.validator,
@@ -53,7 +66,7 @@ class RegisterField extends StatelessWidget {
   final String label;
   final dynamic onChanged;
   final dynamic validator;
-  AutovalidateMode autoValidateMode;
+  final AutovalidateMode autoValidateMode;
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +103,48 @@ class RegisterField extends StatelessWidget {
   }
 }
 
+showAlertDialog(BuildContext context) {
+  // Create AlertDialog
+  AlertDialog alert = AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+    title: Text("Login error"),
+    content: Text("This account doesn't exist would you like to create one."),
+    actions: [
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            side: BorderSide(color: KActionColor),
+            primary: KActionColor,
+            shape: RoundedRectangleBorder(borderRadius: KBorderRadius)),
+        child: Text(
+          "Register",
+          style: TextStyle(color: Colors.black),
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, RegistrationScreen.id);
+        },
+      ),
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            side: BorderSide(color: KActionColor),
+            primary: Color(0xff1c1c1e),
+            shape: RoundedRectangleBorder(borderRadius: KBorderRadius)),
+        child: Text("Return"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      )
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 //password verification
 String? isPasswordCompliant(String password, [int minLength = 6]) {
   if (password.isEmpty) {
@@ -117,6 +172,19 @@ String? isPasswordCompliant(String password, [int minLength = 6]) {
   }
   if (hasMinLength == false) {
     return 'Password must be longer than 8 characters';
+  } else {
+    return null;
+  }
+}
+
+String? isEmailValid(String val) {
+  if (val.isEmpty) {
+    return 'This field is required';
+  }
+
+  // using regular expression
+  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(val)) {
+    return "Please enter a valid email address";
   } else {
     return null;
   }
