@@ -78,8 +78,6 @@ class _SignInState extends State<SignIn> {
                 ],
               ),
               SizedBox(height: 50),
-              //todo update with the input field field instead
-              //todo add icon argument and use with password field
 
               LoginInputField(
                 obscureText: false,
@@ -89,6 +87,7 @@ class _SignInState extends State<SignIn> {
                 },
                 onChanged: (val) {
                   email = val;
+                  email = email.trim();
                 },
               ),
               SizedBox(height: 20.0),
@@ -121,6 +120,7 @@ class _SignInState extends State<SignIn> {
                 buttonColor: KActionColor,
                 label: 'SIGN IN',
                 onPressed: () async {
+                  //todo add check email verification states
                   if (_formKey.currentState!.validate()) {
                     dynamic result =
                         await _auth.signInWithEmailAndPassword(email, password);

@@ -1,3 +1,4 @@
+import 'package:college360/screen/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
@@ -81,6 +82,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       Row(
                         children: [
                           SignButton(
+                              //todo add profile pic feature (optional)
                               label: ' Add Profile Picture',
                               buttonColor: Colors.white10,
                               textColor: Colors.white,
@@ -123,7 +125,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               onChanged: (val) {
                                 lastName = val;
                                 //todo take last name
-                                print(lastName);
                               },
                             ),
                           ),
@@ -256,8 +257,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         textColor: Colors.black,
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            dynamic result = await _auth
-                                .registerWithEmailAndPassword(eMail, password);
+                            //todo send verification email then move user to login screen
+                            dynamic result =
+                                await _auth.registerWithEmailAndPassword(
+                                    eMail,
+                                    password,
+                                    firstName,
+                                    lastName,
+                                    studentId,
+                                    selectedGender);
+                            Navigator.pushNamed(context, HomeScreen.id);
                             //todo add account already exist warning
                             if (result == null) {
                               AlertDialog(

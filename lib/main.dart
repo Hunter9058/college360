@@ -4,7 +4,7 @@ import 'screen/home_screen.dart';
 import 'screen/login_screen.dart';
 import 'screen/registration_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'constant.dart';
+import 'package:college360/constant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

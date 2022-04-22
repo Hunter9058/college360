@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 
+// 0xffF7DE3A
 //Colors
 const KBackGroundColor = Color(0xff1c1c1e);
-const KMainCardBackGroundColor = Color(0xffe7d241); //primary color
+const KMainCardBackGroundColor = Color(0xffF7DE3A); //primary color
 const KActionColor = Color(0xffeae648);
 const KSecondaryColor = Color(0xff283238);
+const KCardTopColor = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xff252525),
+      Color(0xff232323),
+      Color(0xff212021),
+      Color(0xff1e1e20),
+      Color(0xff1c1c1e),
+    ]);
 
 //dark yellow 0xffFFBF28
 //sizes
