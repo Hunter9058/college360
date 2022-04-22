@@ -97,11 +97,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   //card container
                   child: Container(
                     decoration: BoxDecoration(
-                      // color: Color(0xff252525),
-                      gradient: KCardTopColor,
+                      color: Color(0xff1c1c1e),
+                      // gradient: KCardTopColor,
+
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
-                        color: Color(0xff6e6d6d),
+                        color: KMainCardBackGroundColor,
                       ),
                     ),
                     //Main container
@@ -162,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: BoxDecoration(
                                               borderRadius: KBorderRadius,
                                               border: Border.all(
-                                                  color: Colors.white)),
+                                                  color: KActionColor)),
                                           child: IconButton(
                                               onPressed: null,
                                               icon: Icon(
@@ -180,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: BoxDecoration(
                                               borderRadius: KBorderRadius,
                                               border: Border.all(
-                                                  color: Colors.white)),
+                                                  color: KActionColor)),
                                           child: IconButton(
                                               onPressed: null,
                                               icon: Icon(
@@ -203,7 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Text(
                               '🤍 140K',
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
                             ),
                             SizedBox(
                               width: 25,
@@ -215,10 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         topLeft: Radius.circular(20),
                                         topRight: Radius.circular(20),
                                       )),
-                                      border: Border.all(
-                                          width: 0,
-                                          color: KMainCardBackGroundColor),
-                                      color: KMainCardBackGroundColor),
+                                      gradient: KCardTopColor),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         top: 10, left: 15, right: 15),
@@ -230,12 +230,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: BoxDecoration(
                                               borderRadius: KBorderRadius,
                                               border: Border.all(
-                                                  color: Colors.black,
-                                                  width: 1.5)),
+                                                color: Colors.white30,
+                                              )),
                                           child: Text(
                                             'DR.Abdelsalam',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: Colors.white54,
                                                 fontSize: 14),
                                           ),
                                         ),
@@ -248,12 +248,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: BoxDecoration(
                                               borderRadius: KBorderRadius,
                                               border: Border.all(
-                                                  color: Colors.black,
-                                                  width: 1.5)),
+                                                color: Colors.white30,
+                                              )),
                                           child: Text(
                                             'Level 4',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: Colors.white54,
                                                 fontSize: 14),
                                           ),
                                         )

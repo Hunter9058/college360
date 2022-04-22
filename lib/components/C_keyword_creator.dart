@@ -16,15 +16,13 @@ class KeywordCreator extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           decoration: BoxDecoration(
             // gradient: KCardTopColor,
-            color: Colors.black12,
+            color: KMainCardBackGroundColor,
             borderRadius: KBorderRadius,
           ),
           child: Text(
             word,
             style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-            ),
+                fontSize: 14, color: Colors.black, fontFamily: 'Roboto'),
           ),
         ),
       ),

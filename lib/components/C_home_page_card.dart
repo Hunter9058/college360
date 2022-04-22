@@ -12,26 +12,28 @@ class Keyword extends StatelessWidget {
               bottomRight: Radius.circular(30),
               topLeft: Radius.circular(30),
               bottomLeft: Radius.circular(30))),
-          border: Border.all(width: 0, color: KMainCardBackGroundColor),
-          color: KMainCardBackGroundColor,
+          gradient: KCardTopColor,
         ),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'KEY WORDS',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Text(
+                  'KEY WORDS',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13),
+                ),
               ),
               Divider(
-                color: Colors.black,
-                indent: 10,
-                endIndent: 250,
+                color: Colors.white,
+                indent: 15,
+                endIndent: 240,
                 thickness: 1.5,
                 height: 20,
               ),
