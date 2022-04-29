@@ -134,8 +134,8 @@ class _SignInState extends State<SignIn> {
               ),
 
               SizedBox(height: 20.0),
-              //signup button
 
+              //signup button
               SignButton(
                 label: 'SIGN UP',
                 buttonColor: Color(0xff1c1c1e),

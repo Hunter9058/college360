@@ -19,10 +19,13 @@ class KeywordCreator extends StatelessWidget {
             color: KMainCardBackGroundColor,
             borderRadius: KBorderRadius,
           ),
-          child: Text(
-            word,
-            style: TextStyle(
-                fontSize: 14, color: Colors.black, fontFamily: 'Roboto'),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              word,
+              style: TextStyle(
+                  fontSize: 12, color: Colors.black, fontFamily: 'Roboto'),
+            ),
           ),
         ),
       ),

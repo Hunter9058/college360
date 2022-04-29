@@ -19,6 +19,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   animated_text_kit: ^4.2.1
   dropdown_button2: ^1.2.5
+  flutter_secure_storage: ^5.0.2
+  provider: ^6.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

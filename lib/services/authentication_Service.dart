@@ -6,10 +6,11 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //auth change user stream
-  Stream<CustomUser?> get user {
+  Stream<CustomUser?> get userStream {
     return _auth
         .authStateChanges()
         .map((User? user) => _userFromFireBaseUser(user!));
+    //change fireauth user to our custom user
   }
 
 // transform firebase user to our custom user model
