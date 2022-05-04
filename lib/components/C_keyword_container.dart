@@ -3,9 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
 import 'package:college360/components/C_keyword_creator.dart';
 
-class Keyword extends StatelessWidget {
+import '../services/database.dart';
+
+class KeywordContainer extends StatelessWidget {
+  KeywordContainer({
+    required this.likeList,
+    required this.currentUser,
+    required this.documentName,
+    required this.keywords,
+  });
+  final String documentName;
+  final List likeList;
+  final String currentUser;
+  final List keywords;
   @override
   Widget build(BuildContext context) {
+    //todo improve sorting algorithm to arrange where N numbers of var length sum = x
+    keywords.sort((b, a) => a.length.compareTo(b.length));
+
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -49,49 +64,18 @@ class Keyword extends StatelessWidget {
 
               //keywords container
               //todo write a function that arrange text according to length to allow 3 words per line
-              //todo change to stream  builder
+
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Wrap(
                     alignment: WrapAlignment.start,
                     runSpacing: 10,
-                    children: [
-                      KeywordCreator(
-                        word: 'Programming',
-                      ),
-                      KeywordCreator(
-                        word: 'Math',
-                      ),
-                      KeywordCreator(
-                        word: 'Algorithms',
-                      ),
-                      KeywordCreator(
-                        word: 'Functions',
-                      ),
-                      KeywordCreator(
-                        word: 'Arrays',
-                      ),
-                      KeywordCreator(
-                        word: 'Data Types',
-                      ),
-                      KeywordCreator(
-                        word: 'Object Oriented',
-                      ),
-                      KeywordCreator(
-                        word: 'statistics',
-                      ),
-                      KeywordCreator(
-                        word: 'Classes',
-                      ),
-                      KeywordCreator(
-                        word: 'C++',
-                      ),
-                      KeywordCreator(
-                        word: 'Python',
-                      ),
-                      //todo remove extra keywordCreators after adding stream
-                    ],
+                    children: List.generate(keywords.length, (index) {
+                      return KeywordCreator(
+                        word: keywords[index],
+                      );
+                    }),
                   ),
                 ),
               ),
@@ -108,21 +92,32 @@ class Keyword extends StatelessWidget {
                           onPressed: null,
                           icon: Icon(
                             CupertinoIcons.text_bubble,
-                            color: KActionColor,
+                            color: Colors.white,
                             size: 25,
                           )),
                       IconButton(
-                          onPressed: null,
+                          //todo code like button
+                          onPressed: () {
+                            likeList.contains(currentUser)
+                                ? DatabaseService().removeLike(documentName)
+                                : DatabaseService().likeAction(documentName);
+                          },
                           icon: Icon(
-                            CupertinoIcons.heart,
-                            color: KActionColor,
+                            // CupertinoIcons.heart,
+                            likeList.contains(currentUser)
+                                ? CupertinoIcons.heart_fill
+                                : CupertinoIcons.heart,
+
+                            color: likeList.contains(currentUser)
+                                ? Colors.red
+                                : Colors.white,
                             size: 25,
                           )),
                       IconButton(
                           onPressed: null,
                           icon: Icon(
                             CupertinoIcons.paperplane,
-                            color: KActionColor,
+                            color: Colors.white,
                             size: 25,
                           ))
                     ],

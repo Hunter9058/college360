@@ -1,5 +1,7 @@
+import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
 import 'package:college360/services/authentication_Service.dart';
+import 'package:college360/services/database.dart';
 import 'package:college360/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'screen/home_screen.dart';
@@ -18,30 +20,34 @@ void main() async {
 class College360 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //todo use multi provider instead
     return StreamProvider<CustomUser?>.value(
-      catchError: (_, __) {
-        return null;
-      },
-      initialData: null,
-      value: AuthService().userStream,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData.dark().copyWith(
-            primaryColor: KMainCardBackGroundColor,
-            textTheme: const TextTheme(
-                bodyText2: TextStyle(color: Colors.white),
-                bodyText1: TextStyle(color: Colors.white))),
-
-        initialRoute: Wrapper.id,
-        routes: {
-          HomeScreen.id: (context) => HomeScreen(),
-          RegistrationScreen.id: (context) => RegistrationScreen(),
-          Wrapper.id: (context) => Wrapper(),
-          SignIn.id: (context) => SignIn(),
+        catchError: (_, __) {
+          return null;
         },
-        // initialRoute: '/',
-        // routes: {'/': (context) => HomeScreen()},
-      ),
-    );
+        initialData: null,
+        value: AuthService().userStream,
+        child: StreamProvider<List<PostModel>>.value(
+          value: DatabaseService().posts,
+          initialData: [],
+          child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData.dark().copyWith(
+                primaryColor: KMainCardBackGroundColor,
+                textTheme: const TextTheme(
+                    bodyText2: TextStyle(color: Colors.white),
+                    bodyText1: TextStyle(color: Colors.white))),
+
+            initialRoute: Wrapper.id,
+            routes: {
+              HomeScreen.id: (context) => HomeScreen(),
+              RegistrationScreen.id: (context) => RegistrationScreen(),
+              Wrapper.id: (context) => Wrapper(),
+              SignIn.id: (context) => SignIn(),
+            },
+            // initialRoute: '/',
+            // routes: {'/': (context) => HomeScreen()},
+          ),
+        ));
   }
 }
