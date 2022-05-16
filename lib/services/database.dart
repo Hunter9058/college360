@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college360/models/post.dart';
+import 'package:college360/models/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
@@ -24,7 +25,7 @@ class DatabaseService {
     );
   }
 
-  //convert firestore data to custom object
+  //second convert firestore data to custom object
   List<PostModel> _postListFromSnap(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return PostModel(
@@ -40,12 +41,28 @@ class DatabaseService {
     }).toList();
   }
 
-//get posts from database
+  List<CommentModel> _commentListFromSnap(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return CommentModel(
+        commenterUid: doc.get('commenter_uid'),
+        comment: doc.get('comment'),
+        commenterName: doc.get('commenter_name'),
+        commenterPic: doc.get('commenter_pic'),
+      );
+    }).toList();
+  }
+
+//first get data from database
   Stream<List<PostModel>> get posts {
-    return FirebaseFirestore.instance
-        .collection('posts')
+    return postInfo.snapshots().map(_postListFromSnap);
+  }
+
+  Stream<List<CommentModel>> comments(docName) {
+    return postInfo
+        .doc(docName)
+        .collection('comments')
         .snapshots()
-        .map(_postListFromSnap);
+        .map(_commentListFromSnap);
   }
 
   //like a post

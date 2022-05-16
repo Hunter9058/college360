@@ -1,3 +1,4 @@
+import 'package:college360/models/comment.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
 import 'package:college360/services/authentication_Service.dart';
@@ -10,6 +11,7 @@ import 'screen/registration_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:college360/constant.dart';
 import 'package:provider/provider.dart';
+import 'package:college360/screen/comment_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,34 +22,35 @@ void main() async {
 class College360 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //todo use multi provider instead
-    return StreamProvider<CustomUser?>.value(
-        catchError: (_, __) {
-          return null;
-        },
-        initialData: null,
-        value: AuthService().userStream,
-        child: StreamProvider<List<PostModel>>.value(
-          value: DatabaseService().posts,
-          initialData: [],
-          child: MaterialApp(
-            title: 'Flutter Demo',
-            theme: ThemeData.dark().copyWith(
-                primaryColor: KMainCardBackGroundColor,
-                textTheme: const TextTheme(
-                    bodyText2: TextStyle(color: Colors.white),
-                    bodyText1: TextStyle(color: Colors.white))),
+    return MultiProvider(
+      providers: [
+        StreamProvider<CustomUser?>.value(
+            value: AuthService().userStream, initialData: null),
+        StreamProvider<List<PostModel>>.value(
+            value: DatabaseService().posts, initialData: []),
+        //temporary removal
+        // StreamProvider<List<CommentModel>>.value(
+        //     value: DatabaseService().comments, initialData: [])
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData.dark().copyWith(
+            primaryColor: KMainCardBackGroundColor,
+            textTheme: const TextTheme(
+                bodyText2: TextStyle(color: Colors.white),
+                bodyText1: TextStyle(color: Colors.white))),
 
-            initialRoute: Wrapper.id,
-            routes: {
-              HomeScreen.id: (context) => HomeScreen(),
-              RegistrationScreen.id: (context) => RegistrationScreen(),
-              Wrapper.id: (context) => Wrapper(),
-              SignIn.id: (context) => SignIn(),
-            },
-            // initialRoute: '/',
-            // routes: {'/': (context) => HomeScreen()},
-          ),
-        ));
+        initialRoute: Wrapper.id,
+        routes: {
+          HomeScreen.id: (context) => HomeScreen(),
+          RegistrationScreen.id: (context) => RegistrationScreen(),
+          Wrapper.id: (context) => Wrapper(),
+          SignIn.id: (context) => SignIn(),
+          Comment.id: (context) => Comment(),
+        },
+        // initialRoute: '/',
+        // routes: {'/': (context) => HomeScreen()},
+      ),
+    );
   }
 }

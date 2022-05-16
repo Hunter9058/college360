@@ -81,9 +81,7 @@ class RegisterInputField extends StatelessWidget {
         cursorColor: Colors.white,
         decoration: InputDecoration(
             labelText: '$label',
-            floatingLabelStyle: TextStyle(
-              color: Colors.white,
-            ),
+            floatingLabelStyle: TextStyle(color: Colors.white),
             errorBorder: OutlineInputBorder(
                 borderRadius: KBorderRadius,
                 borderSide: BorderSide(color: Colors.red)),

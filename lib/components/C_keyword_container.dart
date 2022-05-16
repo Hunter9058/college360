@@ -1,3 +1,4 @@
+import 'package:college360/screen/comment_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
@@ -5,7 +6,7 @@ import 'package:college360/components/C_keyword_creator.dart';
 
 import '../services/database.dart';
 
-class KeywordContainer extends StatelessWidget {
+class KeywordContainer extends StatefulWidget {
   KeywordContainer({
     required this.likeList,
     required this.currentUser,
@@ -16,11 +17,16 @@ class KeywordContainer extends StatelessWidget {
   final List likeList;
   final String currentUser;
   final List keywords;
+
+  @override
+  State<KeywordContainer> createState() => _KeywordContainerState();
+}
+
+class _KeywordContainerState extends State<KeywordContainer> {
   @override
   Widget build(BuildContext context) {
     //todo improve sorting algorithm to arrange where N numbers of var length sum = x
-    keywords.sort((b, a) => a.length.compareTo(b.length));
-
+    widget.keywords.sort((b, a) => a.length.compareTo(b.length));
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -71,9 +77,9 @@ class KeywordContainer extends StatelessWidget {
                   child: Wrap(
                     alignment: WrapAlignment.start,
                     runSpacing: 10,
-                    children: List.generate(keywords.length, (index) {
+                    children: List.generate(widget.keywords.length, (index) {
                       return KeywordCreator(
-                        word: keywords[index],
+                        word: widget.keywords[index],
                       );
                     }),
                   ),
@@ -89,7 +95,19 @@ class KeywordContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                          onPressed: null,
+                          onPressed: () {
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Comment(
+                                    commentStream: DatabaseService()
+                                        .comments(widget.documentName),
+                                  ),
+                                ),
+                              );
+                            });
+                          },
                           icon: Icon(
                             CupertinoIcons.text_bubble,
                             color: Colors.white,
@@ -98,17 +116,19 @@ class KeywordContainer extends StatelessWidget {
                       IconButton(
                           //todo code like button
                           onPressed: () {
-                            likeList.contains(currentUser)
-                                ? DatabaseService().removeLike(documentName)
-                                : DatabaseService().likeAction(documentName);
+                            widget.likeList.contains(widget.currentUser)
+                                ? DatabaseService()
+                                    .removeLike(widget.documentName)
+                                : DatabaseService()
+                                    .likeAction(widget.documentName);
                           },
                           icon: Icon(
                             // CupertinoIcons.heart,
-                            likeList.contains(currentUser)
+                            widget.likeList.contains(widget.currentUser)
                                 ? CupertinoIcons.heart_fill
                                 : CupertinoIcons.heart,
 
-                            color: likeList.contains(currentUser)
+                            color: widget.likeList.contains(widget.currentUser)
                                 ? Colors.red
                                 : Colors.white,
                             size: 25,
