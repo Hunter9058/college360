@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
+  int commentNumber;
   Timestamp date;
   String posterName;
   String posterPicture;
@@ -10,9 +11,12 @@ class PostModel {
   String subject;
   List likes;
   List keywords;
+  List bookmark;
   var docRef;
 
   PostModel({
+    required this.bookmark,
+    this.commentNumber = 0,
     required this.date,
     required this.posterName,
     this.posterPicture = '',

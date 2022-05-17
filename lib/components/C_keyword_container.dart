@@ -10,10 +10,11 @@ class KeywordContainer extends StatefulWidget {
   KeywordContainer({
     required this.likeList,
     required this.currentUser,
-    required this.documentName,
+    required this.postDocumentName,
     required this.keywords,
   });
-  final String documentName;
+
+  final String postDocumentName;
   final List likeList;
   final String currentUser;
   final List keywords;
@@ -101,8 +102,10 @@ class _KeywordContainerState extends State<KeywordContainer> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => Comment(
+                                    postDocumentName: widget.postDocumentName,
+                                    currentUser: widget.currentUser,
                                     commentStream: DatabaseService()
-                                        .comments(widget.documentName),
+                                        .comments(widget.postDocumentName),
                                   ),
                                 ),
                               );
@@ -114,13 +117,12 @@ class _KeywordContainerState extends State<KeywordContainer> {
                             size: 25,
                           )),
                       IconButton(
-                          //todo code like button
                           onPressed: () {
                             widget.likeList.contains(widget.currentUser)
                                 ? DatabaseService()
-                                    .removeLike(widget.documentName)
+                                    .removeLike(widget.postDocumentName)
                                 : DatabaseService()
-                                    .likeAction(widget.documentName);
+                                    .likeAction(widget.postDocumentName);
                           },
                           icon: Icon(
                             // CupertinoIcons.heart,

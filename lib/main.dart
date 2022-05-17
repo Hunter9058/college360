@@ -1,4 +1,3 @@
-import 'package:college360/models/comment.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
 import 'package:college360/services/authentication_Service.dart';
@@ -24,13 +23,13 @@ class College360 extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        StreamProvider<CustomUser?>.value(
+        StreamProvider<UserModel?>.value(
             value: AuthService().userStream, initialData: null),
         StreamProvider<List<PostModel>>.value(
             value: DatabaseService().posts, initialData: []),
-        //temporary removal
-        // StreamProvider<List<CommentModel>>.value(
-        //     value: DatabaseService().comments, initialData: [])
+        // StreamProvider.value(
+        //     value: DatabaseService().comments,
+        //     initialData: const <CommentModel>[])
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

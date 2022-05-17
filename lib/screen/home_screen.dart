@@ -1,5 +1,6 @@
 import 'package:college360/models/post.dart';
 import 'package:college360/services/authentication_Service.dart';
+import 'package:college360/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final AuthService _authService = AuthService();
   int _selectedIndex = 0;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -183,18 +185,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                           children: [
                                             IconButton(
                                                 onPressed: null,
-                                                //todo fill icon if the user have it bookmarked
-                                                icon: Icon(
-                                                  CupertinoIcons.bookmark,
-                                                  color: Colors.white,
-                                                  size: 25,
-                                                )),
-                                            IconButton(
-                                                onPressed: null,
                                                 icon: Icon(
                                                   CupertinoIcons.book_fill,
-                                                  color: KActionColor,
+                                                  color: Colors.white70,
                                                   size: 30,
+                                                )),
+                                            IconButton(
+                                                onPressed: () {
+                                                  post[index].bookmark.contains(
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid)
+                                                      ? DatabaseService()
+                                                          .removeBookmark(
+                                                              post[index]
+                                                                  .docRef)
+                                                      : DatabaseService()
+                                                          .addBookmark(
+                                                              post[index]
+                                                                  .docRef);
+                                                },
+                                                icon: Icon(
+                                                  post[index].bookmark.contains(
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid)
+                                                      ? CupertinoIcons
+                                                          .bookmark_fill
+                                                      : CupertinoIcons.bookmark,
+                                                  color: KActionColor,
+                                                  size: 25,
                                                 )),
                                           ],
                                         )
@@ -215,6 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           CrossAxisAlignment.end,
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
+                                      // post[index].docRef
                                       children: [
                                         AnimatedFlipCounter(
                                           value:
@@ -224,7 +243,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                         SizedBox(
                                           width: 2,
                                         ),
-                                        Icon(CupertinoIcons.heart_solid)
+                                        Icon(CupertinoIcons.heart_solid),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        AnimatedFlipCounter(
+                                          value: post[index].commentNumber,
+                                          textStyle: TextStyle(fontSize: 15),
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Icon(CupertinoIcons.text_bubble_fill)
                                       ],
                                     ),
                                   ),
@@ -294,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               likeList: post[index].likes,
                               currentUser:
                                   FirebaseAuth.instance.currentUser!.uid,
-                              documentName: post[index].docRef,
+                              postDocumentName: post[index].docRef,
                             ),
                             //4th section (like, dislike,comment)
                           ],

@@ -6,7 +6,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //auth change user stream
-  Stream<CustomUser?> get userStream {
+  Stream<UserModel?> get userStream {
     return _auth
         .authStateChanges()
         .map((User? user) => _userFromFireBaseUser(user!));
@@ -14,10 +14,10 @@ class AuthService {
   }
 
 // transform firebase user to our custom user model
-  CustomUser? _userFromFireBaseUser(User user) {
+  UserModel? _userFromFireBaseUser(User user) {
     // ignore: unnecessary_null_comparison
     if (user != null) {
-      return CustomUser(uid: user.uid);
+      return UserModel(uid: user.uid);
     } else {
       return null;
     }

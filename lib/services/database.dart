@@ -3,15 +3,20 @@ import 'package:college360/models/post.dart';
 import 'package:college360/models/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../models/user.dart';
+
 class DatabaseService {
   final String uid;
+
   DatabaseService({this.uid = ''});
+
   //shortcut for referencing user collection
   final CollectionReference usersInfo =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference postInfo =
       FirebaseFirestore.instance.collection('posts');
-
+  final CollectionReference bookmarksInfo =
+      FirebaseFirestore.instance.collection('bookmarks');
   Future updateUserData(String firstName, String lastName, String email,
       String id, String gender) async {
     return await usersInfo.doc(uid).set(
@@ -29,6 +34,8 @@ class DatabaseService {
   List<PostModel> _postListFromSnap(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return PostModel(
+        bookmark: doc.get('bookmarks'),
+        commentNumber: doc.get('comment_count'),
         date: doc.get('date'),
         posterName: doc.get('poster_name'),
         posterPicture: doc.get('poster_picture'),
@@ -39,6 +46,10 @@ class DatabaseService {
         keywords: List.from(doc['keywords']),
       );
     }).toList();
+  }
+
+  Stream<List<PostModel>> get posts {
+    return postInfo.snapshots().map(_postListFromSnap);
   }
 
   List<CommentModel> _commentListFromSnap(QuerySnapshot snapshot) {
@@ -52,11 +63,6 @@ class DatabaseService {
     }).toList();
   }
 
-//first get data from database
-  Stream<List<PostModel>> get posts {
-    return postInfo.snapshots().map(_postListFromSnap);
-  }
-
   Stream<List<CommentModel>> comments(docName) {
     return postInfo
         .doc(docName)
@@ -64,6 +70,45 @@ class DatabaseService {
         .snapshots()
         .map(_commentListFromSnap);
   }
+
+  Future<UserModel?> getUserData(userDocName) async {
+    final ref = usersInfo.doc(userDocName).withConverter<UserModel>(
+        fromFirestore: ((snapshot, _) => UserModel.fromFireStore(snapshot, _)),
+        toFirestore: (UserModel userModel, _) => userModel.toFirestore());
+    UserModel? fetchedResult = (await ref.get()).data();
+
+    return fetchedResult;
+  }
+
+  // List<UserModel> _userFromSnap(QuerySnapshot snapshot) {
+  //   return snapshot.docs.map((doc) {
+  //     return UserModel(
+  //         email: doc.get('email'),
+  //         firstName: doc.get('firstName'),
+  //         gender: doc.get('gender'),
+  //         lastName: doc.get('lastName'),
+  //         studentId: doc.get('student-id'),
+  //         userPic: doc.get('user_pic'));
+  //   }).toList();
+  // }
+  void incrementComments(postDocumentName) {
+    final DocumentReference docRef = postInfo.doc(postDocumentName);
+    docRef.update({"comment_count": FieldValue.increment(1)});
+  }
+
+  void addComment(
+      postDocumentName, comment, commenterName, commenterPic, commenterUid) {
+    postInfo.doc(postDocumentName).collection('comments').add({
+      'comment': comment,
+      'commenter_name': commenterName,
+      'commenter_pic': commenterPic,
+      'commenter_uid': commenterUid
+    });
+  }
+
+//first get data from database
+
+  //get current user data
 
   //like a post
   void likeAction(String docName) {
@@ -78,4 +123,26 @@ class DatabaseService {
       'likes': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid]),
     });
   }
+
+  //add post to bookmarks
+  void addBookmark(String docName) {
+    postInfo.doc(docName).update({
+      'bookmarks':
+          FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid]),
+    });
+  }
+
+  //remove post from bookmarks
+  void removeBookmark(String docName) {
+    postInfo.doc(docName).update({
+      'bookmarks':
+          FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid]),
+    });
+  }
 }
+// email: doc.get('email'),
+// firstName: doc.get('firstName'),
+// gender: doc.get('gender'),
+// lastName: doc.get('lastName'),
+// studentId: doc.get('student-id'),
+// userPic: doc.get('user_pic')))
