@@ -44,12 +44,19 @@ class AuthService {
     }
   }
 
-  Future registerWithEmailAndPassword(String email, String password,
-      String firstName, String lastName, String id, String gender) async {
+  Future registerWithEmailAndPassword(
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String id,
+    String gender,
+  ) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
+
       //create a document with user UID
       await DatabaseService(uid: user!.uid)
           .updateUserData(firstName, lastName, email, id, gender);

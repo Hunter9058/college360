@@ -1,5 +1,4 @@
 import 'package:college360/models/post.dart';
-import 'package:college360/services/authentication_Service.dart';
 import 'package:college360/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +8,7 @@ import 'package:college360/components/C_keyword_container.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:animated_flip_counter/animated_flip_counter.dart';
+import '../wrapper.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final AuthService _authService = AuthService();
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -30,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final post = Provider.of<List<PostModel>>(context);
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: KBackGroundColor,
@@ -75,10 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 50,
             height: 50,
             child: IconButton(
-                onPressed: () async {
-                  await _authService.signOut();
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushNamed(context, Wrapper.id);
+                  // _authService.signOut();
                 },
-                //todo for testing remove later
+                //todo for testing remove later to another section
                 icon: Icon(
                   Icons.logout,
                   color: Colors.white,
@@ -137,51 +139,50 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(
                                     left: 12, right: 10, top: 10, bottom: 5),
                                 //first row (profile pic , name ,post age,bookmark ,read button)
-                                child: Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        //todo update with user pic
-                                        //todo allow user to add profile pic
+                                child: Container(
+                                  width: screenWidth,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
 
-                                        CircleAvatar(
-                                          backgroundColor: Colors.grey,
-                                          radius: 31,
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                post[index].posterPicture),
-                                            radius: 30,
+                                      CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 31,
+                                        child: CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              post[index].posterPicture),
+                                          radius: 30,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            post[index].posterName,
+                                            style: TextStyle(fontSize: 15),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              post[index].posterName,
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                            Text(
-                                              timeago.format(
-                                                  post[index].date.toDate()),
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.white38),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
+                                          Text(
+                                            timeago.format(
+                                                post[index].date.toDate()),
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white38),
+                                          )
+                                        ],
+                                      ),
 
-                                        //Icon Row
-                                        Row(
+                                      //Icon Row
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8),
+                                        child: Row(
                                           children: [
                                             IconButton(
                                                 onPressed: null,
@@ -215,10 +216,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   size: 25,
                                                 )),
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 )),
                             //2nd row (likes , level ,dr.name)
                             Row(
@@ -319,13 +320,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             // 3section (title text 'keywords')
-                            KeywordContainer(
-                              keywords: post[index].keywords,
-                              likeList: post[index].likes,
-                              currentUser:
-                                  FirebaseAuth.instance.currentUser!.uid,
-                              postDocumentName: post[index].docRef,
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: (BorderRadius.only(
+                                      bottomRight: Radius.circular(30),
+                                      bottomLeft: Radius.circular(30),
+                                      topLeft: Radius.circular(30))),
+                                  gradient: KCardTopColor,
+                                ),
+                                child: KeywordContainer(
+                                  keywords: post[index].keywords,
+                                  likeList: post[index].likes,
+                                  currentUser:
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  postDocumentName: post[index].docRef,
+                                ),
+                              ),
                             ),
+
                             //4th section (like, dislike,comment)
                           ],
                         ),

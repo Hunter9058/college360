@@ -4,6 +4,7 @@ import 'package:college360/services/authentication_Service.dart';
 import 'package:college360/services/database.dart';
 import 'package:college360/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'screen/home_screen.dart';
 import 'screen/login_screen.dart';
 import 'screen/registration_screen.dart';
@@ -14,6 +15,9 @@ import 'package:college360/screen/comment_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //prevent screen rotation
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp();
   return runApp(College360());
 }
@@ -24,7 +28,10 @@ class College360 extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<UserModel?>.value(
-            value: AuthService().userStream, initialData: null),
+          value: AuthService().userStream,
+          initialData: null,
+          catchError: (_, err) => null,
+        ),
         StreamProvider<List<PostModel>>.value(
             value: DatabaseService().posts, initialData: []),
         // StreamProvider.value(

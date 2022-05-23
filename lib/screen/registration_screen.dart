@@ -1,10 +1,17 @@
+import 'dart:io';
+import 'package:college360/services/database.dart';
+import 'package:path/path.dart';
 import 'package:college360/screen/home_screen.dart';
+import 'package:college360/services/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
 import 'package:college360/components/C_login_registration.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:college360/services/authentication_Service.dart';
+
+import '../miniFunctions.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -15,7 +22,6 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   String error = '';
-
   String firstName = '';
   String lastName = '';
   String eMail = '';
@@ -29,6 +35,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  File? profilePic;
 
   @override
   Widget build(BuildContext context) {
@@ -86,13 +93,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               label: ' Add Profile Picture',
                               buttonColor: Colors.white10,
                               textColor: Colors.white,
-                              onPressed: () {}),
+                              onPressed: () async {
+                                profilePic = await pickImage(context);
+                                setState(() {});
+                              }),
                           SizedBox(
                             width: 30,
                           ),
-                          Icon(
-                            CupertinoIcons.profile_circled,
-                            size: 70,
+                          Container(
+                            //show profile picture picture if picked or default icon
+                            child: profilePic != null
+                                ? CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    radius: 40.0,
+                                    child: ClipOval(
+                                      child: Image.file(
+                                        profilePic!,
+                                      ),
+                                    ),
+                                  )
+                                : Icon(
+                                    CupertinoIcons.person_alt_circle,
+                                    color: Colors.white70,
+                                    size: 70,
+                                  ),
                           )
                         ],
                       ),
@@ -109,8 +133,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               label: 'First Name',
                               onChanged: (val) {
                                 firstName = val;
-                                //todo take firstname
-                                print(firstName);
                               },
                             ),
                           ),
@@ -140,6 +162,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         label: 'E-Mail',
                         onChanged: (val) {
                           eMail = val;
+                          eMail = eMail.trim();
                         },
                       ),
                       SizedBox(
@@ -153,6 +176,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         label: 'Password',
                         onChanged: (val) {
                           password = val;
+                          password = password.trim();
                         },
                       ),
                       SizedBox(
@@ -172,7 +196,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               label: 'Student-ID',
                               onChanged: (val) {
                                 studentId = val;
-                                print(studentId);
                               },
                             ),
                           ),
@@ -188,7 +211,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               child: DropdownButtonFormField2(
                                 onChanged: (value) {
                                   selectedGender = value.toString();
-                                  print(selectedGender);
                                 },
                                 validator: (val) => val.toString().isEmpty
                                     ? 'Please pick a gender'
@@ -258,14 +280,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             //todo send verification email then move user to login screen
+                            //todo show alert if email already in use
                             dynamic result =
                                 await _auth.registerWithEmailAndPassword(
-                                    eMail,
-                                    password,
-                                    firstName,
-                                    lastName,
-                                    studentId,
-                                    selectedGender);
+                              eMail,
+                              password,
+                              firstName,
+                              lastName,
+                              studentId,
+                              selectedGender,
+                            );
+                            String currentUser =
+                                FirebaseAuth.instance.currentUser!.uid;
+                            //upload profile pic to server
+                            String userPic = await FireStorage()
+                                .uploadProfilePic(
+                                    profilePic!,
+                                    basename(profilePic!.path),
+                                    FirebaseAuth.instance.currentUser!.uid);
+                            DatabaseService()
+                                .updateProfilePicLink(currentUser, userPic);
+
                             Navigator.pushNamed(context, HomeScreen.id);
                             //todo add account already exist warning
                             if (result == null) {

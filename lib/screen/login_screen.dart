@@ -99,6 +99,7 @@ class _SignInState extends State<SignIn> {
                 },
                 onChanged: (val) {
                   password = val;
+                  password = password.trim();
                 },
                 suffixIcon: IconButton(
                   color: Colors.grey,
@@ -121,14 +122,27 @@ class _SignInState extends State<SignIn> {
                 label: 'SIGN IN',
                 onPressed: () async {
                   //todo add check email verification states
-                  if (_formKey.currentState!.validate()) {
-                    dynamic result =
-                        await _auth.signInWithEmailAndPassword(email, password);
-                    if (result == null) {
-                      showAlertDialog(context);
-                    } else {
-                      Navigator.pushNamed(context, HomeScreen.id);
+                  try {
+                    if (_formKey.currentState!.validate()) {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => Center(
+                                  child: CircularProgressIndicator(
+                                color: KActionColor,
+                                strokeWidth: 6,
+                              )));
+                      dynamic result = await _auth.signInWithEmailAndPassword(
+                          email, password);
+                      if (result == null) {
+                        showAlertDialog(context);
+                      } else {
+                        Navigator.pushNamed(context, HomeScreen.id);
+                      }
                     }
+                  } on Exception catch (e) {
+                    print(e);
+                    // TODO
                   }
                 },
               ),

@@ -17,8 +17,13 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('posts');
   final CollectionReference bookmarksInfo =
       FirebaseFirestore.instance.collection('bookmarks');
-  Future updateUserData(String firstName, String lastName, String email,
-      String id, String gender) async {
+  Future updateUserData(
+    String firstName,
+    String lastName,
+    String email,
+    String id,
+    String gender,
+  ) async {
     return await usersInfo.doc(uid).set(
       {
         'email': email,
@@ -28,6 +33,10 @@ class DatabaseService {
         'gender': gender,
       },
     );
+  }
+
+  void updateProfilePicLink(String uid, picLink) {
+    usersInfo.doc(uid).update({'user_pic': picLink});
   }
 
   //second convert firestore data to custom object
@@ -80,17 +89,6 @@ class DatabaseService {
     return fetchedResult;
   }
 
-  // List<UserModel> _userFromSnap(QuerySnapshot snapshot) {
-  //   return snapshot.docs.map((doc) {
-  //     return UserModel(
-  //         email: doc.get('email'),
-  //         firstName: doc.get('firstName'),
-  //         gender: doc.get('gender'),
-  //         lastName: doc.get('lastName'),
-  //         studentId: doc.get('student-id'),
-  //         userPic: doc.get('user_pic'));
-  //   }).toList();
-  // }
   void incrementComments(postDocumentName) {
     final DocumentReference docRef = postInfo.doc(postDocumentName);
     docRef.update({"comment_count": FieldValue.increment(1)});
@@ -139,10 +137,6 @@ class DatabaseService {
           FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid]),
     });
   }
+
+  //end of file
 }
-// email: doc.get('email'),
-// firstName: doc.get('firstName'),
-// gender: doc.get('gender'),
-// lastName: doc.get('lastName'),
-// studentId: doc.get('student-id'),
-// userPic: doc.get('user_pic')))
