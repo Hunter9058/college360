@@ -70,7 +70,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
               child: Container(
                 //todo edit for responsiveness
                 width: screenWidth,
-                height: 210,
+                height: 276,
                 child: PageView(
                     controller: _pageController,
                     onPageChanged: (page) {
@@ -132,7 +132,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
             ),
             //scroll indicator
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: PageViewDotIndicator(
                 currentItem: selectedPage,
                 count: pageCount,
@@ -145,64 +145,69 @@ class _KeywordContainerState extends State<KeywordContainer> {
             //todo write a function that arrange text according to length to allow 3 words per line
 
             //last row (comments likes and share button)
-            Column(
-              children: [
-                Divider(
-                  height: 0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Comment(
-                                  postDocumentName: widget.postDocumentName,
-                                  currentUser: widget.currentUser,
-                                  commentStream: DatabaseService()
-                                      .comments(widget.postDocumentName),
-                                ),
-                              ),
-                            );
-                          });
-                        },
-                        icon: Icon(
-                          CupertinoIcons.text_bubble,
-                          color: Colors.white,
-                          size: 25,
-                        )),
-                    IconButton(
-                        onPressed: () {
-                          widget.likeList.contains(widget.currentUser)
-                              ? DatabaseService()
-                                  .removeLike(widget.postDocumentName)
-                              : DatabaseService()
-                                  .likeAction(widget.postDocumentName);
-                        },
-                        icon: Icon(
-                          // CupertinoIcons.heart,
-                          widget.likeList.contains(widget.currentUser)
-                              ? CupertinoIcons.heart_fill
-                              : CupertinoIcons.heart,
+            Expanded(
+              child: Column(
+                children: [
+                  Divider(
+                    height: 0,
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Comment(
+                                      postDocumentName: widget.postDocumentName,
+                                      currentUser: widget.currentUser,
+                                      commentStream: DatabaseService()
+                                          .comments(widget.postDocumentName),
+                                    ),
+                                  ),
+                                );
+                              });
+                            },
+                            icon: Icon(
+                              CupertinoIcons.text_bubble,
+                              color: Colors.white,
+                              size: 25,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              widget.likeList.contains(widget.currentUser)
+                                  ? DatabaseService()
+                                      .removeLike(widget.postDocumentName)
+                                  : DatabaseService()
+                                      .likeAction(widget.postDocumentName);
+                            },
+                            icon: Icon(
+                              // CupertinoIcons.heart,
+                              widget.likeList.contains(widget.currentUser)
+                                  ? CupertinoIcons.heart_fill
+                                  : CupertinoIcons.heart,
 
-                          color: widget.likeList.contains(widget.currentUser)
-                              ? Colors.red
-                              : Colors.white,
-                          size: 25,
-                        )),
-                    IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          CupertinoIcons.paperplane,
-                          color: Colors.white,
-                          size: 25,
-                        ))
-                  ],
-                ),
-              ],
+                              color:
+                                  widget.likeList.contains(widget.currentUser)
+                                      ? Colors.red
+                                      : Colors.white,
+                              size: 25,
+                            )),
+                        IconButton(
+                            onPressed: null,
+                            icon: Icon(
+                              CupertinoIcons.paperplane,
+                              color: Colors.white,
+                              size: 25,
+                            ))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

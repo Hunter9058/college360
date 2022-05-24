@@ -25,8 +25,9 @@ class _PhotoGridState extends State<PhotoGrid> {
     var images = buildImages();
 
     return GridView(
+      physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
+        maxCrossAxisExtent: 250,
         crossAxisSpacing: 2,
         mainAxisSpacing: 2,
       ),

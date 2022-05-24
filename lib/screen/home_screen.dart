@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //Main  middle container
                 Container(
                     //card padding
-                    padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 35, horizontal: 20),
                     height: MediaQuery.of(context).size.height - 280,
                     child: Material(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
