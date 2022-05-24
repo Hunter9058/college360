@@ -6,6 +6,7 @@ import 'package:college360/components/C_keyword_creator.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 
 import '../services/database.dart';
+import 'C_ImageGridView.dart';
 
 class KeywordContainer extends StatefulWidget {
   KeywordContainer({
@@ -13,12 +14,14 @@ class KeywordContainer extends StatefulWidget {
     required this.currentUser,
     required this.postDocumentName,
     required this.keywords,
+    required this.content,
   });
 
   final String postDocumentName;
   final List likeList;
   final String currentUser;
   final List keywords;
+  final List<String> content;
 
   @override
   State<KeywordContainer> createState() => _KeywordContainerState();
@@ -118,7 +121,12 @@ class _KeywordContainerState extends State<KeywordContainer> {
                         ),
                       ),
                       //second slide
-                      Container()
+                      PhotoGrid(
+                        imageUrls: widget.content,
+                        onImageClicked: (i) => print('Image $i was clicked!'),
+                        onExpandClicked: () =>
+                            print('Expand Image was clicked'),
+                      ),
                     ]),
               ),
             ),

@@ -43,17 +43,17 @@ class DatabaseService {
   List<PostModel> _postListFromSnap(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return PostModel(
-        bookmark: doc.get('bookmarks'),
-        commentNumber: doc.get('comment_count'),
-        date: doc.get('date'),
-        posterName: doc.get('poster_name'),
-        posterPicture: doc.get('poster_picture'),
-        posterUid: doc.get('poster_uid'),
-        subject: doc.get('subject'),
-        likes: List.from(doc['likes']),
-        docRef: doc.id,
-        keywords: List.from(doc['keywords']),
-      );
+          bookmark: doc.get('bookmarks'),
+          commentNumber: doc.get('comment_count'),
+          date: doc.get('date'),
+          posterName: doc.get('poster_name'),
+          posterPicture: doc.get('poster_picture'),
+          posterUid: doc.get('poster_uid'),
+          subject: doc.get('subject'),
+          likes: List.from(doc['likes']),
+          docRef: doc.id,
+          keywords: List.from(doc['keywords']),
+          content: List.from(doc['content']));
     }).toList();
   }
 

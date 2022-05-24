@@ -332,6 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: KeywordContainer(
                                   keywords: post[index].keywords,
                                   likeList: post[index].likes,
+                                  content: post[index].content,
                                   currentUser:
                                       FirebaseAuth.instance.currentUser!.uid,
                                   postDocumentName: post[index].docRef,

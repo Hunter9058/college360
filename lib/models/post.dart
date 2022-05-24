@@ -12,18 +12,19 @@ class PostModel {
   List likes;
   List keywords;
   List bookmark;
+  List<String> content;
   var docRef;
 
-  PostModel({
-    required this.bookmark,
-    this.commentNumber = 0,
-    required this.date,
-    required this.posterName,
-    this.posterPicture = '',
-    this.posterUid = '',
-    this.subject = '',
-    required this.likes,
-    this.docRef,
-    required this.keywords,
-  });
+  PostModel(
+      {required this.bookmark,
+      this.commentNumber = 0,
+      required this.date,
+      required this.posterName,
+      this.posterPicture = '',
+      this.posterUid = '',
+      this.subject = '',
+      required this.likes,
+      this.docRef,
+      required this.keywords,
+      required this.content});
 }
