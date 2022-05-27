@@ -1,6 +1,10 @@
+import 'package:college360/constant.dart';
+import 'package:college360/miniFunctions.dart';
 import 'package:college360/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:college360/models/user.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -45,13 +49,13 @@ class AuthService {
   }
 
   Future registerWithEmailAndPassword(
-    String email,
-    String password,
-    String firstName,
-    String lastName,
-    String id,
-    String gender,
-  ) async {
+      String email,
+      String password,
+      String firstName,
+      String lastName,
+      String id,
+      String gender,
+      context) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -61,9 +65,32 @@ class AuthService {
       await DatabaseService(uid: user!.uid)
           .updateUserData(firstName, lastName, email, id, gender);
       return _userFromFireBaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } on FirebaseException catch (e) {
+      print("Your error is => ${e.toString()}");
+      showSnackBar(e.message, context);
     }
   }
+
+  Future resetPassword(String email, context) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(
+              child: CircularProgressIndicator(
+                color: KActionColor,
+              ),
+            ));
+    try {
+      await Firebase.initializeApp();
+      await _auth.sendPasswordResetEmail(email: email).then((value) => {
+            showSnackBar('Password Reset Email Sent', context),
+            Navigator.of(context).popUntil((route) => route.isFirst)
+          });
+    } on FirebaseException catch (e) {
+      print("Your error is => ${e.toString()}");
+      showSnackBar(e.message, context);
+      Navigator.of(context).pop();
+    }
+  }
+  //end of file
 }

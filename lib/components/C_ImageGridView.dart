@@ -24,14 +24,20 @@ class _PhotoGridState extends State<PhotoGrid> {
   Widget build(BuildContext context) {
     var images = buildImages();
 
-    return GridView(
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 250,
-        crossAxisSpacing: 2,
-        mainAxisSpacing: 2,
+    return ClipRRect(
+      //round image container border
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      borderRadius: BorderRadius.circular(20.0),
+      child: GridView(
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            //width
+            crossAxisSpacing: 2,
+            mainAxisSpacing: 2,
+            maxCrossAxisExtent: MediaQuery.of(context).size.height * 0.36,
+            mainAxisExtent: MediaQuery.of(context).size.width * 0.36),
+        children: images,
       ),
-      children: images,
     );
   }
 

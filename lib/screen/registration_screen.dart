@@ -103,13 +103,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Container(
                             //show profile picture picture if picked or default icon
                             child: profilePic != null
-                                ? CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    radius: 40.0,
-                                    child: ClipOval(
-                                      child: Image.file(
-                                        profilePic!,
-                                      ),
+                                ? ClipOval(
+                                    child: Image.file(
+                                      profilePic!,
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
                                     ),
                                   )
                                 : Icon(
@@ -283,13 +282,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             //todo show alert if email already in use
                             dynamic result =
                                 await _auth.registerWithEmailAndPassword(
-                              eMail,
-                              password,
-                              firstName,
-                              lastName,
-                              studentId,
-                              selectedGender,
-                            );
+                                    eMail,
+                                    password,
+                                    firstName,
+                                    lastName,
+                                    studentId,
+                                    selectedGender,
+                                    context);
                             String currentUser =
                                 FirebaseAuth.instance.currentUser!.uid;
                             //upload profile pic to server

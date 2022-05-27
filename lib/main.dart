@@ -1,5 +1,6 @@
 import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
+import 'package:college360/screen/forgotPassword_screen.dart';
 import 'package:college360/services/authentication_Service.dart';
 import 'package:college360/services/database.dart';
 import 'package:college360/wrapper.dart';
@@ -48,6 +49,7 @@ class College360 extends StatelessWidget {
 
         initialRoute: Wrapper.id,
         routes: {
+          ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
           HomeScreen.id: (context) => HomeScreen(),
           RegistrationScreen.id: (context) => RegistrationScreen(),
           Wrapper.id: (context) => Wrapper(),

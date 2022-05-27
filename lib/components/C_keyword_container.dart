@@ -43,6 +43,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
     final pageCount = 2;
 
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     //todo improve sorting algorithm to arrange where N numbers of var length sum = x
     widget.keywords.sort((b, a) => a.length.compareTo(b.length));
     return Container(
@@ -70,7 +71,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
               child: Container(
                 //todo edit for responsiveness
                 width: screenWidth,
-                height: 276,
+                height: screenHeight * 0.35,
                 child: PageView(
                     controller: _pageController,
                     onPageChanged: (page) {
@@ -84,36 +85,44 @@ class _KeywordContainerState extends State<KeywordContainer> {
                         //first slide
                         child: Column(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'KEY WORDS',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13),
-                                ),
-                                Divider(
-                                  endIndent: 230,
-                                  thickness: 1.5,
-                                  color: Colors.yellowAccent,
-                                )
-                              ],
+                            Flexible(
+                              flex: 2,
+                              fit: FlexFit.tight,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'KEY WORDS',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 13),
+                                  ),
+                                  Divider(
+                                    endIndent: 230,
+                                    thickness: 1.5,
+                                    color: Colors.yellowAccent,
+                                  )
+                                ],
+                              ),
                             ),
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Wrap(
-                                  alignment: WrapAlignment.start,
-                                  runSpacing: 10,
-                                  children: List.generate(
-                                      widget.keywords.length, (index) {
-                                    return KeywordCreator(
-                                      word: widget.keywords[index],
-                                    );
-                                  }),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              flex: 12,
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Wrap(
+                                    alignment: WrapAlignment.start,
+                                    runSpacing: 10,
+                                    children: List.generate(
+                                        widget.keywords.length, (index) {
+                                      return KeywordCreator(
+                                        word: widget.keywords[index],
+                                      );
+                                    }),
+                                  ),
                                 ),
                               ),
                             ),
@@ -131,21 +140,25 @@ class _KeywordContainerState extends State<KeywordContainer> {
               ),
             ),
             //scroll indicator
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: PageViewDotIndicator(
-                currentItem: selectedPage,
-                count: pageCount,
-                unselectedColor: Colors.white12,
-                selectedColor: Colors.white,
-                duration: Duration(milliseconds: 200),
+            Flexible(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: PageViewDotIndicator(
+                  currentItem: selectedPage,
+                  count: pageCount,
+                  unselectedColor: Colors.white12,
+                  selectedColor: Colors.white,
+                  duration: Duration(milliseconds: 200),
+                ),
               ),
             ),
             //keywords container
             //todo write a function that arrange text according to length to allow 3 words per line
 
             //last row (comments likes and share button)
-            Expanded(
+            Flexible(
+              flex: 2,
               child: Column(
                 children: [
                   Divider(

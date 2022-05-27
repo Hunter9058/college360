@@ -5,6 +5,7 @@ import 'package:college360/constant.dart';
 class LoginInputField extends StatelessWidget {
   const LoginInputField(
       {required this.hintText,
+      this.bottomSpace = 20,
       required this.onChanged,
       this.suffixIcon,
       this.validator,
@@ -14,9 +15,11 @@ class LoginInputField extends StatelessWidget {
   final dynamic onChanged;
   final dynamic suffixIcon;
   final dynamic validator;
+  final double bottomSpace;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      scrollPadding: EdgeInsets.only(bottom: bottomSpace),
       onChanged: onChanged,
       validator: (validator),
       cursorColor: KActionColor,
@@ -60,6 +63,7 @@ class SignButton extends StatelessWidget {
 class RegisterInputField extends StatelessWidget {
   RegisterInputField(
       {required this.label,
+      this.bottomSpace = 20,
       required this.onChanged,
       required this.validator,
       this.autoValidateMode = AutovalidateMode.disabled});
@@ -67,6 +71,7 @@ class RegisterInputField extends StatelessWidget {
   final dynamic onChanged;
   final dynamic validator;
   final AutovalidateMode autoValidateMode;
+  final double bottomSpace;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +80,7 @@ class RegisterInputField extends StatelessWidget {
       elevation: 0,
       borderRadius: KBorderRadius,
       child: TextFormField(
+        scrollPadding: EdgeInsets.only(bottom: bottomSpace),
         autovalidateMode: autoValidateMode,
         validator: (validator),
         onChanged: onChanged,

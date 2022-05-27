@@ -18,11 +18,10 @@ IconData likeButtonStatus(String currentUser, List likeList) {
 //pick picture
 Future pickImage(context) async {
   try {
-    dynamic profilePic =
+    XFile? profilePic =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-    profilePic =
-        await FlutterNativeImage.compressImage(profilePic, quality: 50);
-    if (profilePic == null) return;
+    File result =
+        await FlutterNativeImage.compressImage(profilePic!.path, quality: 50);
 
     final File imageTemp = File(profilePic.path);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -45,4 +44,22 @@ Future pickImage(context) async {
       ),
     );
   }
+}
+
+void showSnackBar(String? text, context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: KSecondaryColor,
+      content: Text(
+        text!,
+        style: TextStyle(color: Colors.white),
+      ),
+      action: SnackBarAction(
+        label: 'Ok',
+        onPressed: () {
+          // Some code to undo the change.
+        },
+      ),
+    ),
+  );
 }
