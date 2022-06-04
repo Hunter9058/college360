@@ -223,14 +223,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     borderRadius: KBorderRadius,
                                     borderSide: BorderSide(color: KActionColor),
                                   ),
-
                                   isDense: true,
                                   contentPadding: EdgeInsets.zero,
                                   border: OutlineInputBorder(
                                     borderRadius: KBorderRadius,
                                   ),
-
-                                  //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
                                 ),
                                 isExpanded: true,
                                 hint: const Text(

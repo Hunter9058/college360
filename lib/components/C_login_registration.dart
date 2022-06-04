@@ -65,7 +65,7 @@ class RegisterInputField extends StatelessWidget {
       {required this.label,
       this.bottomSpace = 20,
       required this.onChanged,
-      required this.validator,
+      this.validator,
       this.autoValidateMode = AutovalidateMode.disabled});
   final String label;
   final dynamic onChanged;

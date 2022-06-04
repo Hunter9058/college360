@@ -17,6 +17,7 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('posts');
   final CollectionReference bookmarksInfo =
       FirebaseFirestore.instance.collection('bookmarks');
+
   Future updateUserData(
     String firstName,
     String lastName,
@@ -31,6 +32,7 @@ class DatabaseService {
         'lastName': lastName,
         'student-Id': id,
         'gender': gender,
+        'admin': false,
       },
     );
   }
@@ -138,5 +140,30 @@ class DatabaseService {
     });
   }
 
-  //end of file
+  void uploadApkDownloadLink(String downloadLink) {
+    FirebaseFirestore.instance
+        .collection('app_apk')
+        .doc('D2smp4WuBfTnOPdgklz6')
+        .set(
+      {'download_link': downloadLink},
+    );
+  }
+
+//todo optimize nullability
+  Future<String> getApkDownloadLink() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('app_apk')
+          .doc('D2smp4WuBfTnOPdgklz6')
+          .get()
+          .then((value) {
+        return value.data()!['download_link'];
+      });
+    } on FirebaseException catch (e) {
+      print('error message ${e.message}');
+      return 'unavailable';
+    }
+    return 'unavailable';
+  }
+//end of file
 }

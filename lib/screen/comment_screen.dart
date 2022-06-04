@@ -41,23 +41,7 @@ class _CommentState extends State<Comment> {
           appBar: AppBar(
             backgroundColor: KBackGroundColor,
             automaticallyImplyLeading: false,
-            title: RichText(
-              text: TextSpan(
-                style: TextStyle(fontSize: 18, letterSpacing: 1.0),
-                children: [
-                  TextSpan(
-                    text: 'Comments ',
-                    style: TextStyle(
-                      color: KActionColor,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  TextSpan(
-                      text: '(${comment.length.toString()})',
-                      style: TextStyle(color: Colors.grey))
-                ],
-              ),
-            ),
+            title: appTitle(),
             actions: [
               IconButton(
                   onPressed: () {

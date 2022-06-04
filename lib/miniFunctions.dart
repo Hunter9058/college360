@@ -23,7 +23,7 @@ Future pickImage(context) async {
     File result =
         await FlutterNativeImage.compressImage(profilePic!.path, quality: 50);
 
-    final File imageTemp = File(profilePic.path);
+    final File imageTemp = File(result.path);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         'Image Picked',
@@ -46,7 +46,35 @@ Future pickImage(context) async {
   }
 }
 
-void showSnackBar(String? text, context) {
+Future pickMultiNotes(context) async {
+  try {
+    List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
+
+    if (selectedImages!.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Image Picked',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: KSecondaryColor,
+      ));
+      return selectedImages;
+    }
+  } on PlatformException catch (e) {
+    //alert in case of failed task
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error $e'),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+}
+
+void showSnackBar(String? text, dynamic context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor: KSecondaryColor,

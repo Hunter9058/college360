@@ -71,7 +71,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
               child: Container(
                 //todo edit for responsiveness
                 width: screenWidth,
-                height: screenHeight * 0.35,
+                height: screenHeight * 0.32,
                 child: PageView(
                     controller: _pageController,
                     onPageChanged: (page) {
@@ -111,18 +111,15 @@ class _KeywordContainerState extends State<KeywordContainer> {
                               fit: FlexFit.loose,
                               flex: 12,
                               child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Wrap(
-                                    alignment: WrapAlignment.start,
-                                    runSpacing: 10,
-                                    children: List.generate(
-                                        widget.keywords.length, (index) {
-                                      return KeywordCreator(
-                                        word: widget.keywords[index],
-                                      );
-                                    }),
-                                  ),
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  runSpacing: 10,
+                                  children: List.generate(
+                                      widget.keywords.length, (index) {
+                                    return KeywordCreator(
+                                      word: widget.keywords[index],
+                                    );
+                                  }),
                                 ),
                               ),
                             ),
@@ -158,7 +155,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
 
             //last row (comments likes and share button)
             Flexible(
-              flex: 2,
+              flex: 3,
               child: Column(
                 children: [
                   Divider(

@@ -29,3 +29,22 @@ class MyBehavior extends ScrollBehavior {
     return child;
   }
 }
+
+Widget appTitle() {
+  return RichText(
+    text: TextSpan(
+      style: TextStyle(fontSize: 25, letterSpacing: 1.0),
+      children: [
+        TextSpan(
+          text: 'College',
+          style: TextStyle(
+              fontFamily: 'PlayfairDisplay',
+              color: Color(0xffD8D3D6),
+              fontWeight: FontWeight.w900,
+              fontStyle: FontStyle.italic),
+        ),
+        TextSpan(text: ' 360', style: TextStyle(color: KActionColor))
+      ],
+    ),
+  );
+}

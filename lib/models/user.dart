@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  UserModel(
-      {this.uid = '',
-      this.email = '',
-      this.firstName = '',
-      this.lastName = '',
-      this.gender = '',
-      this.studentId = '',
-      this.userPic = ''});
+  UserModel({
+    this.uid = '',
+    this.email = '',
+    this.firstName = '',
+    this.lastName = '',
+    this.gender = '',
+    this.studentId = '',
+    this.userPic = '',
+    this.admin = false,
+  });
 
   String uid;
   String email;
@@ -17,7 +19,7 @@ class UserModel {
   String lastName;
   String studentId;
   String userPic;
-
+  bool admin;
   UserModel.fromFireStore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
@@ -27,7 +29,9 @@ class UserModel {
         lastName = snapshot.data()?['lastName'],
         studentId = snapshot.data()?['student-Id'],
         userPic = snapshot.data()?['user_pic'],
+        admin = snapshot.data()?['admin'],
         uid = snapshot.id;
+
   Map<String, dynamic> toFirestore() {
     return {
       "firstName": firstName,

@@ -1,5 +1,7 @@
+import 'package:college360/home_pages/addPost.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
+import 'package:college360/screen/admin_screen.dart';
 import 'package:college360/screen/forgotPassword_screen.dart';
 import 'package:college360/services/authentication_Service.dart';
 import 'package:college360/services/database.dart';
@@ -49,12 +51,14 @@ class College360 extends StatelessWidget {
 
         initialRoute: Wrapper.id,
         routes: {
+          AddPost.id: (context) => AddPost(),
           ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
           HomeScreen.id: (context) => HomeScreen(),
           RegistrationScreen.id: (context) => RegistrationScreen(),
           Wrapper.id: (context) => Wrapper(),
           SignIn.id: (context) => SignIn(),
           Comment.id: (context) => Comment(),
+          AdminPage.id: (context) => AdminPage(),
         },
         // initialRoute: '/',
         // routes: {'/': (context) => HomeScreen()},

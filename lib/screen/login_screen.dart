@@ -97,9 +97,7 @@ class _SignInState extends State<SignIn> {
                   bottomSpace: 110,
                   obscureText: isPassVisible,
                   hintText: 'Password',
-                  validator: (val) {
-                    return isPasswordCompliant(val);
-                  },
+                  validator: null,
                   onChanged: (val) {
                     password = val;
                     password = password.trim();
@@ -171,7 +169,7 @@ class _SignInState extends State<SignIn> {
                     });
                   }, //redirect to retrieve screen
                   child: Text(
-                    'Forgot username or password ?',
+                    'Forgot password ?',
                     style: TextStyle(fontSize: 12, color: forgotColor),
                   ),
                 ),
