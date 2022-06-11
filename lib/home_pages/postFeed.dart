@@ -1,4 +1,6 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:college360/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ class PostFeed extends StatefulWidget {
 }
 
 class _PostFeedState extends State<PostFeed> {
+  dynamic searchResult;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +93,16 @@ class _PostFeedState extends State<PostFeed> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: TextField(
-              onChanged: null,
+              onChanged: (value) async {
+                //todo add search
+                List<QueryDocumentSnapshot<UserModel>> result =
+                    await DatabaseService().userSearch(value);
+
+                setState(() {
+                  searchResult = result;
+                  print(result[0].data().email);
+                });
+              },
               cursorColor: Colors.white,
               decoration: InputDecoration(
                   suffixIcon: Icon(

@@ -165,5 +165,22 @@ class DatabaseService {
     }
     return 'unavailable';
   }
+
+  Future<List<QueryDocumentSnapshot<UserModel>>> userSearch(
+      String query) async {
+    final documentList = (await FirebaseFirestore.instance
+            .collection('users')
+            .where('firstName', isGreaterThanOrEqualTo: query)
+            .where('firstName', isLessThanOrEqualTo: query + '\uf8ff')
+            .withConverter<UserModel>(
+                fromFirestore: ((snapshot, _) =>
+                    UserModel.fromFireStore(snapshot, _)),
+                toFirestore: (UserModel userModel, _) =>
+                    userModel.toFirestore())
+            .get())
+        .docs;
+
+    return documentList;
+  }
 //end of file
 }

@@ -47,6 +47,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.w800),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          //retrieve user full name
+                          'people helped: 200',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                              color: KActionColor),
+                        ),
+                      ),
                       Flexible(
                         flex: 1,
                         child: Padding(
@@ -88,7 +99,7 @@ class _TopCoverState extends State<TopCover> {
     final double profileHeight = widget.widget.screenHeight / 4;
     final topMargin = widget.widget.screenHeight / 4 - profileHeight / 2;
     return Container(
-      margin: EdgeInsets.only(bottom: profileHeight / 2),
+      margin: EdgeInsets.only(bottom: profileHeight / 2.1),
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
@@ -132,8 +143,10 @@ class _TopCoverState extends State<TopCover> {
                 FirebaseFirestore.instance
                     .collection('users')
                     .doc(currentUser)
-                    .update({'user_pic': userPic}).then(
-                        (value) => setState(() {}));
+                    .update({'user_pic': userPic}).then((value) => setState(() {
+                          print('page rebuilt');
+                        }));
+                //todo fix insta refresh
               },
               child: Icon(
                 Icons.edit_outlined,

@@ -19,6 +19,7 @@ class Wrapper extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return FutureBuilder<UserModel?>(
+                initialData: null,
                 future: DatabaseService()
                     .getUserData(FirebaseAuth.instance.currentUser!.uid),
                 builder: (context, snapshot2) {

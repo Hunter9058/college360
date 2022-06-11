@@ -51,12 +51,19 @@ class _AdminPageState extends State<AdminPage> {
                           SizedBox(
                             width: 15,
                           ),
-                          Text(userData.firstName)
+                          Text(
+                            'Admin: ${userData.firstName}',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    null),
+                    //todo edit later
+                    Container()),
                 body: Container(
+                  padding: EdgeInsets.all(20),
                   height: screenHeight,
                   width: screenWidth,
                   child: Column(
@@ -93,7 +100,7 @@ class _AdminPageState extends State<AdminPage> {
                                   primary: KActionColor,
                                   minimumSize: Size(screenWidth / 5, 45),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: KBorderRadius)))
+                                      borderRadius: KBorderRadius))),
                         ],
                       ),
                     ],

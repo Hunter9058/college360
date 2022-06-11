@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_Storage;
@@ -12,6 +13,7 @@ class FireStorage {
   //initialize storage
   final firebase_Storage.FirebaseStorage storage =
       firebase_Storage.FirebaseStorage.instance;
+
 //provide user uid as filename
   //upload profile pic to database
   Future uploadProfilePic(
@@ -73,5 +75,5 @@ class FireStorage {
     }
   }
 
-  //end of class
+//end of class
 }

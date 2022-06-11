@@ -2,6 +2,7 @@ import 'package:college360/screen/forgotPassword_screen.dart';
 import 'package:college360/screen/home_screen.dart';
 import 'package:college360/screen/registration_screen.dart';
 import 'package:college360/services/authentication_Service.dart';
+import 'package:college360/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -138,7 +139,7 @@ class _SignInState extends State<SignIn> {
                         if (result == null) {
                           showAlertDialog(context);
                         } else {
-                          Navigator.pushNamed(context, HomeScreen.id);
+                          Navigator.pushNamed(context, Wrapper.id);
                         }
                       }
                     } on Exception catch (e) {
