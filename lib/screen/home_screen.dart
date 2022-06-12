@@ -1,4 +1,5 @@
 import 'package:college360/models/post.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
@@ -37,7 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
           post: post, screenWidth: screenWidth, screenHeight: screenHeight),
       Text('screen 2'),
       Text('screen 3'),
-      ProfilePage(screenWidth: screenWidth, screenHeight: screenHeight),
+      ProfilePage(
+        userUid: FirebaseAuth.instance.currentUser!.uid,
+      ),
     ];
     return SafeArea(
       //to prevent going back to wrapper
@@ -68,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
               FloatingActionButtonLocation.centerDocked,
           backgroundColor: KBackGroundColor,
 
-          //todo add white feature bar
           //switch between screens
+          //todo change index-1 on back
           body: IndexedStack(index: _selectedIndex, children: screens),
           bottomNavigationBar: BottomAppBar(
             clipBehavior: Clip.antiAlias,
@@ -94,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: Padding(
                       padding: const EdgeInsets.only(right: 35),
                       child: Icon(
-                        CupertinoIcons.text_bubble,
+                        CupertinoIcons.chat_bubble_text,
                       ),
                     ),
                     label: 'Home',

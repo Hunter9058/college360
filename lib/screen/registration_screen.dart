@@ -131,7 +131,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   : null,
                               label: 'First Name',
                               onChanged: (val) {
+                                //todo allow user to user case sensitive naming
                                 firstName = val;
+                                firstName = firstName.toLowerCase();
                               },
                             ),
                           ),
@@ -145,6 +147,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               label: 'Last Name',
                               onChanged: (val) {
                                 lastName = val;
+                                lastName = lastName.toLowerCase();
                                 //todo take last name
                               },
                             ),

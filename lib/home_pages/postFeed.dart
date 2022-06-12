@@ -8,6 +8,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../components/C_keyword_container.dart';
 import '../constant.dart';
 import '../models/post.dart';
+import '../screen/search_screen.dart';
 import '../services/database.dart';
 import '../services/firebase_storage.dart';
 import '../wrapper.dart';
@@ -29,7 +30,8 @@ class PostFeed extends StatefulWidget {
 }
 
 class _PostFeedState extends State<PostFeed> {
-  dynamic searchResult;
+  List<QueryDocumentSnapshot<UserModel>> searchResult = [];
+  List<QueryDocumentSnapshot<UserModel>> result = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +41,6 @@ class _PostFeedState extends State<PostFeed> {
         automaticallyImplyLeading: false,
         toolbarHeight: 70,
         elevation: 0,
-
         title: appTitle(),
         backgroundColor: KBackGroundColor, //app bar color
         actions: [
@@ -90,37 +91,43 @@ class _PostFeedState extends State<PostFeed> {
           )
         ],
         bottom: PreferredSize(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: TextField(
-              onChanged: (value) async {
-                //todo add search
-                List<QueryDocumentSnapshot<UserModel>> result =
-                    await DatabaseService().userSearch(value);
-
-                setState(() {
-                  searchResult = result;
-                  print(result[0].data().email);
-                });
-              },
-              cursorColor: Colors.white,
-              decoration: InputDecoration(
-                  suffixIcon: Icon(
-                    Icons.search,
-                    color: Colors.white,
+          preferredSize: Size.fromHeight(widget.screenHeight * 0.10),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, SearchScreen.id);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50),
+                      primary: Colors.transparent,
+                      padding: EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: KBorderRadius,
+                        side: BorderSide(color: Colors.grey),
+                      )),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.search,
+                        color: KActionColor,
+                        size: 25,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Looking for some notes, a friend ...',
+                          style: TextStyle(color: Colors.white54),
+                        ),
+                      )
+                    ],
                   ),
-                  labelText: 'Search',
-                  floatingLabelStyle: TextStyle(color: Colors.white),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(30))),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                    borderSide: BorderSide(color: KActionColor),
-                  )),
-            ),
+                ),
+              ),
+            ],
           ),
-          preferredSize: Size.fromHeight(70),
         ),
       ),
       body: ListView.builder(

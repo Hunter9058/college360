@@ -82,7 +82,7 @@ class DatabaseService {
         .map(_commentListFromSnap);
   }
 
-  Future<UserModel?> getUserData(userDocName) async {
+  Future<UserModel?> getUserData(String? userDocName) async {
     final ref = usersInfo.doc(userDocName).withConverter<UserModel>(
         fromFirestore: ((snapshot, _) => UserModel.fromFireStore(snapshot, _)),
         toFirestore: (UserModel userModel, _) => userModel.toFirestore());
@@ -170,6 +170,7 @@ class DatabaseService {
       String query) async {
     final documentList = (await FirebaseFirestore.instance
             .collection('users')
+            .orderBy('firstName')
             .where('firstName', isGreaterThanOrEqualTo: query)
             .where('firstName', isLessThanOrEqualTo: query + '\uf8ff')
             .withConverter<UserModel>(

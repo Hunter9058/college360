@@ -9,9 +9,10 @@ import '../services/database.dart';
 import '../services/firebase_storage.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({required this.screenWidth, required this.screenHeight});
-  final double screenWidth;
-  final double screenHeight;
+  static const String id = 'profile';
+  const ProfilePage({this.userUid = ''});
+
+  final userUid;
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -21,8 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: FutureBuilder<UserModel?>(
-          future: DatabaseService()
-              .getUserData(FirebaseAuth.instance.currentUser!.uid),
+          future: DatabaseService().getUserData(widget.userUid),
           builder: (context, snapshot) {
             //assign snapshot data to userModel object
             final UserModel? userData = snapshot.data;
@@ -30,8 +30,8 @@ class _ProfilePageState extends State<ProfilePage> {
               return Scaffold(
                 backgroundColor: KBackGroundColor,
                 body: Container(
-                  height: widget.screenHeight,
-                  width: widget.screenWidth,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
                       Flexible(
@@ -96,8 +96,9 @@ class _TopCoverState extends State<TopCover> {
   @override
   Widget build(BuildContext context) {
     var profilePic;
-    final double profileHeight = widget.widget.screenHeight / 4;
-    final topMargin = widget.widget.screenHeight / 4 - profileHeight / 2;
+    final double profileHeight = MediaQuery.of(context).size.height / 4;
+    final topMargin =
+        MediaQuery.of(context).size.height / 4 - profileHeight / 2;
     return Container(
       margin: EdgeInsets.only(bottom: profileHeight / 2.1),
       child: Stack(
@@ -106,7 +107,7 @@ class _TopCoverState extends State<TopCover> {
         children: [
           Image.asset(
             'assets/images/profile-cover2.gif',
-            width: widget.widget.screenWidth,
+            width: MediaQuery.of(context).size.width,
           ),
           Positioned(
             top: topMargin,
@@ -123,7 +124,7 @@ class _TopCoverState extends State<TopCover> {
           ),
           Positioned(
             top: topMargin * 2.5,
-            right: widget.widget.screenWidth / 4,
+            right: MediaQuery.of(context).size.width / 4,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   primary: Colors.grey.withOpacity(0.3),

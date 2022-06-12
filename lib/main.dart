@@ -1,8 +1,11 @@
 import 'package:college360/home_pages/addPost.dart';
+import 'package:college360/home_pages/profile.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
 import 'package:college360/screen/admin_screen.dart';
 import 'package:college360/screen/forgotPassword_screen.dart';
+
+import 'package:college360/screen/search_screen.dart';
 import 'package:college360/services/authentication_Service.dart';
 import 'package:college360/services/database.dart';
 import 'package:college360/wrapper.dart';
@@ -59,6 +62,8 @@ class College360 extends StatelessWidget {
           SignIn.id: (context) => SignIn(),
           Comment.id: (context) => Comment(),
           AdminPage.id: (context) => AdminPage(),
+          SearchScreen.id: (context) => SearchScreen(),
+          ProfilePage.id: (context) => ProfilePage(),
         },
         // initialRoute: '/',
         // routes: {'/': (context) => HomeScreen()},

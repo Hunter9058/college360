@@ -8,7 +8,8 @@ class UserModel {
     this.lastName = '',
     this.gender = '',
     this.studentId = '',
-    this.userPic = '',
+    this.userPic =
+        'https://firebasestorage.googleapis.com/v0/b/college360-e87b7.appspot.com/o/default_profile_pic%2FdefultAvater.jpg?alt=media&token=2f9febb9-c8f9-4fb9-8ae7-3c7dad89801b',
     this.admin = false,
   });
 
