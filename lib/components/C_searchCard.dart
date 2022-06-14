@@ -1,19 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:college360/components/C_Admin.dart';
 import 'package:college360/home_pages/profile.dart';
+import 'package:college360/services/GlobalData.dart';
 import 'package:flutter/material.dart';
 
 import '../constant.dart';
 import '../models/user.dart';
 
 class SearchCard extends StatefulWidget {
-  SearchCard({required this.suggestions, required this.listHeight});
+  SearchCard(
+      {required this.suggestions,
+      required this.listHeight,
+      required this.admin});
   final double listHeight;
   final List<QueryDocumentSnapshot<UserModel>> suggestions;
+  final bool admin;
   @override
   State<SearchCard> createState() => _SearchCardState();
 }
 
 class _SearchCardState extends State<SearchCard> {
+  MyService _myService = MyService();
   @override
   Widget build(BuildContext context) {
     //todo update list length for efficiency
@@ -32,16 +39,26 @@ class _SearchCardState extends State<SearchCard> {
                 ),
                 child: Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfilePage(
-                                    userUid:
-                                        widget.suggestions[index].data().uid,
-                                  )));
-                      setState(() {});
-                    },
+                    onPressed: widget.admin
+                        //check if current user is admin
+                        ? () {
+                            showAdminAlertDialog(
+                                context,
+                                widget.suggestions[index].data().admin,
+                                widget.suggestions[index].data().uid);
+                            setState(() {});
+                          }
+                        : () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfilePage(
+                                          userUid: widget.suggestions[index]
+                                              .data()
+                                              .uid,
+                                        )));
+                            setState(() {});
+                          },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.transparent, elevation: 0),
                     child: ListTile(
@@ -56,6 +73,14 @@ class _SearchCardState extends State<SearchCard> {
                       ),
                       title: Text(
                           "${widget.suggestions[index].data().firstName} ${widget.suggestions[index].data().lastName}"),
+                      subtitle: Text(
+                        //todo update with user college lvl
+                        widget.suggestions[index].data().studentId ==
+                                _myService.currentUser!.studentId
+                            ? 'You'
+                            : 'lvl 4',
+                        style: TextStyle(color: Colors.white54, fontSize: 12),
+                      ),
                     ),
                   ),
                 ),

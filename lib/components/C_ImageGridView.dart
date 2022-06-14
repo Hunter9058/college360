@@ -2,15 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../screen/expandedImage_screen.dart';
+
 class PhotoGrid extends StatefulWidget {
   final int maxImages;
   final List<String> imageUrls;
-  final Function(int) onImageClicked;
+
   final Function onExpandClicked;
 
   PhotoGrid({
     required this.imageUrls,
-    required this.onImageClicked,
     required this.onExpandClicked,
     this.maxImages = 4,
   });
@@ -58,7 +59,13 @@ class _PhotoGridState extends State<PhotoGrid> {
               imageUrl,
               fit: BoxFit.cover,
             ),
-            onTap: () => widget.onImageClicked(index),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return ExpandedImage(
+                  imageUrl: imageUrl,
+                );
+              }));
+            },
           );
         } else {
           // Create the facebook like effect for the last image with number of remaining  images
@@ -84,11 +91,20 @@ class _PhotoGridState extends State<PhotoGrid> {
         }
       } else {
         return GestureDetector(
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: imageUrl,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
-          onTap: () => widget.onImageClicked(index),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return ExpandedImage(
+                imageUrl: imageUrl,
+              );
+            }));
+          },
         );
       }
     });

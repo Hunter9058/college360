@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:college360/miniFunctions.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -140,30 +141,31 @@ class DatabaseService {
     });
   }
 
-  void uploadApkDownloadLink(String downloadLink) {
+  void uploadApkDownloadLink(String downloadLink, dynamic context) {
     FirebaseFirestore.instance
         .collection('app_apk')
         .doc('D2smp4WuBfTnOPdgklz6')
         .set(
       {'download_link': downloadLink},
-    );
+    ).then((value) => showSnackBar('upload complete', context));
   }
 
 //todo optimize nullability
   Future<String> getApkDownloadLink() async {
+    var result;
     try {
       await FirebaseFirestore.instance
           .collection('app_apk')
           .doc('D2smp4WuBfTnOPdgklz6')
           .get()
           .then((value) {
-        return value.data()!['download_link'];
+        result = value.data()!['download_link'];
       });
+      return result;
     } on FirebaseException catch (e) {
       print('error message ${e.message}');
       return 'unavailable';
     }
-    return 'unavailable';
   }
 
   Future<List<QueryDocumentSnapshot<UserModel>>> userSearch(
@@ -183,5 +185,10 @@ class DatabaseService {
 
     return documentList;
   }
+
+  void changeAdminStatus(String userUid, bool status) {
+    usersInfo.doc(userUid).update({'admin': status});
+  }
+
 //end of file
 }

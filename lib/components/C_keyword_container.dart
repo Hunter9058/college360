@@ -1,33 +1,39 @@
+import 'dart:io';
+
 import 'package:college360/screen/comment_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:college360/constant.dart';
 import 'package:college360/components/C_keyword_creator.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:http/http.dart' as http;
 import '../services/database.dart';
 import 'C_ImageGridView.dart';
 
 class KeywordContainer extends StatefulWidget {
-  KeywordContainer({
-    required this.likeList,
-    required this.currentUser,
-    required this.postDocumentName,
-    required this.keywords,
-    required this.content,
-  });
+  KeywordContainer(
+      {required this.likeList,
+      required this.currentUser,
+      required this.postDocumentName,
+      required this.keywords,
+      required this.content,
+      required this.posterName});
 
   final String postDocumentName;
   final List likeList;
   final String currentUser;
   final List keywords;
   final List<String> content;
+  final String posterName;
 
   @override
   State<KeywordContainer> createState() => _KeywordContainerState();
 }
 
 class _KeywordContainerState extends State<KeywordContainer> {
+  final List<String> shareImages = [];
   late int selectedPage;
   late final PageController _pageController;
   @override
@@ -129,7 +135,6 @@ class _KeywordContainerState extends State<KeywordContainer> {
                       //second slide
                       PhotoGrid(
                         imageUrls: widget.content,
-                        onImageClicked: (i) => print('Image $i was clicked!'),
                         onExpandClicked: () =>
                             print('Expand Image was clicked'),
                       ),
@@ -207,7 +212,36 @@ class _KeywordContainerState extends State<KeywordContainer> {
                               size: 25,
                             )),
                         IconButton(
-                            onPressed: null,
+                            //todo allow file share
+                            onPressed: () async {
+                              widget.content
+                                  .asMap()
+                                  .forEach((index, element) async {
+                                final url = Uri.parse(element);
+                                final response = await http.get(url);
+                                final bytes = response.bodyBytes;
+
+                                final temp = await getTemporaryDirectory();
+                                final path = '${temp.path}/$index.jpg';
+                                File(path).writeAsBytesSync(bytes);
+                                setState(() {
+                                  shareImages.add(path);
+                                  //todo remove after testing
+                                  print('file added');
+                                  print(shareImages);
+                                });
+                                if (widget.content.length ==
+                                    shareImages.length) {
+                                  await Share.shareFiles(shareImages,
+                                          subject:
+                                              'A friend would like to share ${widget.posterName} notes with you from college 360')
+                                      .then((value) => shareImages.clear());
+                                  //add
+                                }
+                              });
+
+                              // Share.share(linkSum, subject: 'link share test');
+                            },
                             icon: Icon(
                               CupertinoIcons.paperplane,
                               color: Colors.white,

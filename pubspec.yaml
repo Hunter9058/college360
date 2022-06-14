@@ -32,7 +32,8 @@ dependencies:
   path_provider: ^2.0.10
   open_file: ^3.2.1
   firestore_search: ^0.1.9
-
+  share_plus: ^4.0.7
+  percent_indicator: ^4.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

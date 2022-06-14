@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:college360/services/database.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../components/C_Admin.dart';
 import '../components/C_Appbar.dart';
+import '../components/C_searchCard.dart';
 import '../constant.dart';
 import '../models/user.dart';
 import '../services/firebase_storage.dart';
@@ -18,13 +21,16 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  String progress = '';
   File? file;
   UploadTask? task;
-
+  List<QueryDocumentSnapshot<UserModel>> searchResult = [];
+  List<QueryDocumentSnapshot<UserModel>> result = [];
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: FutureBuilder<UserModel?>(
           future: DatabaseService()
@@ -62,48 +68,124 @@ class _AdminPageState extends State<AdminPage> {
                     ),
                     //todo edit later
                     Container()),
-                body: Container(
+                body:
+                    //main container
+                    Container(
                   padding: EdgeInsets.all(20),
                   height: screenHeight,
                   width: screenWidth,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                selectFile();
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                (BorderRadius.all(Radius.circular(30))),
+                            color: Colors.black38,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    selectFile();
+                                  },
+                                  child: Text(
+                                    file != null
+                                        ? 'File Selected'
+                                        : '📎 Select APK',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      elevation: 6,
+                                      side: BorderSide(color: KActionColor),
+                                      primary: Color(0xff1c1c1e),
+                                      minimumSize: Size(screenWidth / 1.8, 45),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: KBorderRadius))),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    uploadApk(context);
+                                    print(task);
+                                    setState(() {});
+                                  },
+                                  child: Text(' Upload ',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18)),
+                                  style: ElevatedButton.styleFrom(
+                                      elevation: 6,
+                                      side: BorderSide(color: KActionColor),
+                                      primary: KActionColor,
+                                      minimumSize: Size(screenWidth / 5, 45),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: KBorderRadius))),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        task != null ? buildUploadStatus(task!) : Container(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  (BorderRadius.all(Radius.circular(15))),
+                              color: Colors.black38,
+                            ),
+                            child: TextField(
+                              scrollPadding: EdgeInsets.all(10),
+                              onChanged: (value) async {
+                                if (value.isEmpty) {
+                                  searchResult.clear();
+                                }
+                                //todo add search
+                                if (value.isNotEmpty)
+                                  result =
+                                      await DatabaseService().userSearch(value);
+                                setState(() {
+                                  searchResult = result;
+                                });
                               },
-                              child: Text(
-                                file != null
-                                    ? 'File Selected'
-                                    : '📎 Select APK',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: KActionColor),
-                                  primary: Color(0xff1c1c1e),
-                                  minimumSize: Size(screenWidth / 1.8, 45),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: KBorderRadius))),
-                          ElevatedButton(
-                              onPressed: () {
-                                uploadApk();
-                              },
-                              child: Text(' Upload ',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18)),
-                              style: ElevatedButton.styleFrom(
-                                  side: BorderSide(color: KActionColor),
-                                  primary: KActionColor,
-                                  minimumSize: Size(screenWidth / 5, 45),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: KBorderRadius))),
-                        ],
-                      ),
-                    ],
+                              cursorColor: Colors.white,
+                              decoration: InputDecoration(
+                                  suffixIcon: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
+                                  labelText: 'Upgrade user to admin',
+                                  floatingLabelStyle:
+                                      TextStyle(color: Colors.white),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                      borderRadius: KBorderRadius),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: KBorderRadius,
+                                    borderSide: BorderSide(color: KActionColor),
+                                  )),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                (BorderRadius.all(Radius.circular(30))),
+                            color: Colors.black38,
+                          ),
+                          child: SingleChildScrollView(
+                              child: SearchCard(
+                            admin: true,
+                            suggestions: searchResult,
+                            listHeight: screenHeight * 0.30,
+                          )),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -123,7 +205,7 @@ class _AdminPageState extends State<AdminPage> {
     setState(() => file = File(path));
   }
 
-  Future uploadApk() async {
+  Future uploadApk(context) async {
     if (file == null) return;
 
     final fileName = basename(file!.path);
@@ -133,27 +215,11 @@ class _AdminPageState extends State<AdminPage> {
     if (task == null) return;
     final snapshot = await task!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
-    DatabaseService().uploadApkDownloadLink(urlDownload);
-    //todo upload apk download url to database
+    DatabaseService().uploadApkDownloadLink(urlDownload, context);
   }
 }
 
-buildUploadStatus(UploadTask task) {
-  StreamBuilder<TaskSnapshot>(
-      stream: task.snapshotEvents,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final snap = snapshot.data!;
-          final progress = snap.bytesTransferred / snap.totalBytes;
-          final String percentage = (progress * 100).toStringAsFixed(2);
-          print(percentage);
-          return Text(
-            '$percentage %',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          );
-        } else
-          return Container(
-            child: Text('no upload'),
-          );
-      });
-}
+// Text(
+// '$percentage %',
+// style: TextStyle(color: Colors.white, fontSize: 20),
+// )

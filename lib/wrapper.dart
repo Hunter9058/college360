@@ -1,6 +1,7 @@
 import 'package:college360/screen/admin_screen.dart';
 import 'package:college360/screen/home_screen.dart';
 import 'package:college360/screen/login_screen.dart';
+import 'package:college360/services/GlobalData.dart';
 import 'package:college360/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MyService _myService = MyService();
     //todo add a stream depose after use to save memory
     return StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -26,6 +28,7 @@ class Wrapper extends StatelessWidget {
                   final UserModel? userData = snapshot2.data;
 
                   if (snapshot2.hasData) {
+                    _myService.currentUser = userData;
                     if (userData!.admin == true) {
                       return AdminPage();
                     } else {

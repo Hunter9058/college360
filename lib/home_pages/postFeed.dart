@@ -1,16 +1,20 @@
+import 'dart:io';
+
 import 'package:animated_flip_counter/animated_flip_counter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:college360/models/user.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../components/C_keyword_container.dart';
 import '../constant.dart';
+import '../miniFunctions.dart';
 import '../models/post.dart';
 import '../screen/search_screen.dart';
 import '../services/database.dart';
-import '../services/firebase_storage.dart';
 import '../wrapper.dart';
 
 class PostFeed extends StatefulWidget {
@@ -30,8 +34,7 @@ class PostFeed extends StatefulWidget {
 }
 
 class _PostFeedState extends State<PostFeed> {
-  List<QueryDocumentSnapshot<UserModel>> searchResult = [];
-  List<QueryDocumentSnapshot<UserModel>> result = [];
+  double progress = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,24 +72,41 @@ class _PostFeedState extends State<PostFeed> {
               Container(
                 width: 50,
                 height: 44,
-                child: IconButton(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        elevation: 1,
+                        minimumSize: Size(double.infinity, 50),
+                        primary: Colors.transparent,
+                        shape: CircleBorder()),
                     onPressed: () async {
                       String downloadLink =
                           await DatabaseService().getApkDownloadLink();
+
                       //todo remove after testing
                       print(downloadLink);
-                      FireStorage().openFile(
-                          url: downloadLink,
-                          fileName: 'college360.apk',
-                          context: context);
+                      openFile(
+                              url: downloadLink,
+                              fileName: 'college360.apk',
+                              context: context)
+                          .then((value) => print('opening file'));
                     },
                     //todo for testing remove later to another section
-                    icon: Icon(
-                      Icons.download_sharp,
-                      color: Colors.white,
-                      size: 30,
+                    child: new CircularPercentIndicator(
+                      radius: 20.0,
+                      lineWidth: 5.0,
+                      percent: progress,
+                      center: new Icon(
+                        Icons.download_sharp,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                      progressColor: KActionColor,
+                      backgroundColor: KBackGroundColor,
                     )),
               ),
+              SizedBox(
+                width: 20,
+              )
             ],
           )
         ],
@@ -212,7 +232,7 @@ class _PostFeedState extends State<PostFeed> {
                                           child: Row(
                                             children: [
                                               IconButton(
-                                                  onPressed: null,
+                                                  onPressed: () {},
                                                   icon: Icon(
                                                     CupertinoIcons.book_fill,
                                                     color: Colors.white70,
@@ -371,6 +391,7 @@ class _PostFeedState extends State<PostFeed> {
                                     gradient: KCardTopColor,
                                   ),
                                   child: KeywordContainer(
+                                    posterName: widget.post[index].posterName,
                                     keywords: widget.post[index].keywords,
                                     likeList: widget.post[index].likes,
                                     content: widget.post[index].content,
@@ -391,5 +412,42 @@ class _PostFeedState extends State<PostFeed> {
             );
           }),
     );
+  }
+
+  Future openFile({required String url, String? fileName, context}) async {
+    final file = await downloadFile(url, fileName!)
+        .whenComplete(() => showSnackBar('download complete', context));
+    if (file == null) return;
+    //todo remove after testing
+    print('path: ${file.path}');
+    OpenFile.open(file.path);
+  }
+
+//todo move these function from main file
+  //todo to be removed later
+//download new apk update
+  Future<File?> downloadFile(String url, String name) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/$name');
+    try {
+      final response = await Dio().get(url, onReceiveProgress: (rcv, total) {
+        //todo remove after testing
+
+        setState(() {
+          progress = ((rcv / total));
+        });
+      },
+          options: Options(
+              responseType: ResponseType.bytes,
+              followRedirects: false,
+              receiveTimeout: 0));
+      final raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+      return file;
+    } on Exception catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 }

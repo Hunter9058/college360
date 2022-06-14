@@ -84,6 +84,7 @@ void showSnackBar(String? text, dynamic context) {
       ),
       action: SnackBarAction(
         label: 'Ok',
+        textColor: KActionColor,
         onPressed: () {
           // Some code to undo the change.
         },

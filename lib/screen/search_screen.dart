@@ -34,6 +34,9 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               TextField(
                 onChanged: (value) async {
+                  if (value.isEmpty) {
+                    searchResult.clear();
+                  }
                   //todo add search
                   if (value.isNotEmpty)
                     result = await DatabaseService().userSearch(value);
@@ -69,6 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: searchResult.isNotEmpty
             ? SingleChildScrollView(
                 child: SearchCard(
+                admin: false,
                 suggestions: searchResult,
                 listHeight: screenHeight * 0.80,
               ))
