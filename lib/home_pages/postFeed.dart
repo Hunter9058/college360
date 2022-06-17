@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -70,12 +71,12 @@ class _PostFeedState extends State<PostFeed> {
                 textAlign: TextAlign.center,
               ),
               Container(
-                width: 50,
-                height: 44,
+                width: 60,
+                height: 50,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         elevation: 1,
-                        minimumSize: Size(double.infinity, 50),
+                        minimumSize: Size(50, 50),
                         primary: Colors.transparent,
                         shape: CircleBorder()),
                     onPressed: () async {
@@ -91,14 +92,34 @@ class _PostFeedState extends State<PostFeed> {
                           .then((value) => print('opening file'));
                     },
                     //todo for testing remove later to another section
-                    child: new CircularPercentIndicator(
-                      radius: 20.0,
+                    child: CircularPercentIndicator(
+                      radius: 25.0,
                       lineWidth: 5.0,
                       percent: progress,
-                      center: new Icon(
-                        Icons.download_sharp,
-                        color: Colors.white,
-                        size: 18,
+                      center: AnimatedSwitcher(
+                        transitionBuilder:
+                            (Widget child, Animation<double> animation) =>
+                                ScaleTransition(
+                          child: child,
+                          scale: animation,
+                        ),
+                        duration: Duration(seconds: 1),
+                        child: progress == 0
+                            ? new Icon(
+                                Icons.download_sharp,
+                                color: Colors.white,
+                                size: 18,
+                              )
+                            : progress == 100
+                                ? new Icon(
+                                    Icons.check,
+                                    color: KActionColor,
+                                    size: 18,
+                                  )
+                                : Lottie.asset(
+                                    'assets/Icons/cloud-download.json',
+                                    fit: BoxFit.fill,
+                                  ),
                       ),
                       progressColor: KActionColor,
                       backgroundColor: KBackGroundColor,

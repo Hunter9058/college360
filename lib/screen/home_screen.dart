@@ -1,3 +1,4 @@
+import 'package:college360/home_pages/testpage.dart';
 import 'package:college360/models/post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final screens = [
       PostFeed(
           post: post, screenWidth: screenWidth, screenHeight: screenHeight),
-      Text('screen 2'),
+      Test(),
       Text('screen 3'),
       ProfilePage(
         userUid: FirebaseAuth.instance.currentUser!.uid,

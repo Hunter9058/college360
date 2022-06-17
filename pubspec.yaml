@@ -34,6 +34,7 @@ dependencies:
   firestore_search: ^0.1.9
   share_plus: ^4.0.7
   percent_indicator: ^4.0.1
+  lottie: ^1.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -47,6 +48,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/Icons/
   fonts:
      - family: PlayfairDisplay
        fonts:
