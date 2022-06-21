@@ -14,6 +14,7 @@ class PostModel {
   List bookmark;
   List<String> content;
   var docRef;
+  bool isAdv;
 
   PostModel(
       {required this.bookmark,
@@ -25,6 +26,7 @@ class PostModel {
       this.subject = '',
       required this.likes,
       this.docRef,
-      required this.keywords,
-      required this.content});
+      this.keywords = const [],
+      required this.content,
+      this.isAdv = false});
 }

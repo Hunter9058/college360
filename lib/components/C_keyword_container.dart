@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:college360/screen/comment_screen.dart';
@@ -19,7 +20,8 @@ class KeywordContainer extends StatefulWidget {
       required this.postDocumentName,
       required this.keywords,
       required this.content,
-      required this.posterName});
+      required this.posterName,
+      required this.isAdv});
 
   final String postDocumentName;
   final List likeList;
@@ -27,6 +29,7 @@ class KeywordContainer extends StatefulWidget {
   final List keywords;
   final List<String> content;
   final String posterName;
+  final bool isAdv;
 
   @override
   State<KeywordContainer> createState() => _KeywordContainerState();
@@ -38,7 +41,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
   late final PageController _pageController;
   @override
   void initState() {
-    selectedPage = 0;
+    selectedPage = widget.isAdv ? 1 : 0;
     _pageController = PageController(initialPage: selectedPage);
 
     super.initState();
@@ -77,8 +80,10 @@ class _KeywordContainerState extends State<KeywordContainer> {
               child: Container(
                 //todo edit for responsiveness
                 width: screenWidth,
-                height: screenHeight * 0.32,
+                height: screenHeight * 0.36,
                 child: PageView(
+                    physics:
+                        widget.isAdv ? NeverScrollableScrollPhysics() : null,
                     controller: _pageController,
                     onPageChanged: (page) {
                       setState(() {
@@ -133,6 +138,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
                         ),
                       ),
                       //second slide
+
                       PhotoGrid(
                         imageUrls: widget.content,
                         onExpandClicked: () =>
@@ -142,17 +148,20 @@ class _KeywordContainerState extends State<KeywordContainer> {
               ),
             ),
             //scroll indicator
+
             Flexible(
               flex: 2,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: PageViewDotIndicator(
-                  currentItem: selectedPage,
-                  count: pageCount,
-                  unselectedColor: Colors.white12,
-                  selectedColor: Colors.white,
-                  duration: Duration(milliseconds: 200),
-                ),
+                child: widget.isAdv
+                    ? Container()
+                    : PageViewDotIndicator(
+                        currentItem: selectedPage,
+                        count: pageCount,
+                        unselectedColor: Colors.white12,
+                        selectedColor: Colors.white,
+                        duration: Duration(milliseconds: 200),
+                      ),
               ),
             ),
             //keywords container
@@ -233,6 +242,9 @@ class _KeywordContainerState extends State<KeywordContainer> {
                                 if (widget.content.length ==
                                     shareImages.length) {
                                   await Share.shareFiles(shareImages,
+                                          text: widget.isAdv
+                                              ? 'A friend would like to share ${widget.posterName} Advertisement with you'
+                                              : null,
                                           subject:
                                               'A friend would like to share ${widget.posterName} notes with you from college 360')
                                       .then((value) => shareImages.clear());

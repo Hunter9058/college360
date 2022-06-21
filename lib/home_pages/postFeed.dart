@@ -36,6 +36,7 @@ class PostFeed extends StatefulWidget {
 
 class _PostFeedState extends State<PostFeed> {
   double progress = 0;
+  bool isAdv = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,14 +112,14 @@ class _PostFeedState extends State<PostFeed> {
                                 size: 18,
                               )
                             : progress == 100
-                                ? new Icon(
+                                ? Lottie.asset(
+                                    'assets/Icons/cloud-download.json',
+                                    fit: BoxFit.fill,
+                                  )
+                                : new Icon(
                                     Icons.check,
                                     color: KActionColor,
                                     size: 18,
-                                  )
-                                : Lottie.asset(
-                                    'assets/Icons/cloud-download.json',
-                                    fit: BoxFit.fill,
                                   ),
                       ),
                       progressColor: KActionColor,
@@ -179,6 +180,7 @@ class _PostFeedState extends State<PostFeed> {
               child: Column(
                 children: [
                   //Main  middle container
+
                   Container(
                       //card padding
                       padding:
@@ -252,13 +254,18 @@ class _PostFeedState extends State<PostFeed> {
                                               const EdgeInsets.only(left: 8),
                                           child: Row(
                                             children: [
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    CupertinoIcons.book_fill,
-                                                    color: Colors.white70,
-                                                    size: 30,
-                                                  )),
+                                              widget.post[index].isAdv
+                                                  ? Container(
+                                                      width: 30,
+                                                    )
+                                                  : IconButton(
+                                                      onPressed: () {},
+                                                      icon: Icon(
+                                                        CupertinoIcons
+                                                            .book_fill,
+                                                        color: Colors.white70,
+                                                        size: 30,
+                                                      )),
                                               IconButton(
                                                   onPressed: () {
                                                     widget.post[index].bookmark
@@ -402,6 +409,7 @@ class _PostFeedState extends State<PostFeed> {
                                 ],
                               ),
                               // 3section (title text 'keywords')
+                              //4th section (like, dislike,comment)
                               Expanded(
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -412,6 +420,7 @@ class _PostFeedState extends State<PostFeed> {
                                     gradient: KCardTopColor,
                                   ),
                                   child: KeywordContainer(
+                                    isAdv: widget.post[index].isAdv,
                                     posterName: widget.post[index].posterName,
                                     keywords: widget.post[index].keywords,
                                     likeList: widget.post[index].likes,
@@ -422,12 +431,14 @@ class _PostFeedState extends State<PostFeed> {
                                   ),
                                 ),
                               ),
-
-                              //4th section (like, dislike,comment)
                             ],
                           ),
                         ),
                       )),
+                  //adds ads section every 3 post
+                  // (index % 2) == 0 && index != 0
+                  //     ? advCreator(context)
+                  //     : Container(),
                 ],
               ),
             );

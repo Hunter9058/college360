@@ -1,4 +1,4 @@
-import 'package:college360/home_pages/testpage.dart';
+import 'package:college360/home_pages/testPage.dart';
 import 'package:college360/models/post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

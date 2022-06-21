@@ -108,7 +108,6 @@ class _AdminPageState extends State<AdminPage> {
                               ElevatedButton(
                                   onPressed: () {
                                     uploadApk(context);
-                                    print(task);
                                     setState(() {});
                                   },
                                   child: Text(' Upload ',

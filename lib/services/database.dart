@@ -56,12 +56,17 @@ class DatabaseService {
           likes: List.from(doc['likes']),
           docRef: doc.id,
           keywords: List.from(doc['keywords']),
-          content: List.from(doc['content']));
+          content: List.from(doc['content']),
+          isAdv: doc.get('isAdv'));
     }).toList();
   }
 
   Stream<List<PostModel>> get posts {
-    return postInfo.snapshots().map(_postListFromSnap);
+    //order post new to old
+    return postInfo
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map(_postListFromSnap);
   }
 
   List<CommentModel> _commentListFromSnap(QuerySnapshot snapshot) {
