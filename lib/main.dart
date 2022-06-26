@@ -2,7 +2,8 @@ import 'package:college360/home_pages/addPost.dart';
 import 'package:college360/home_pages/profile.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
-import 'package:college360/screen/admin_screen.dart';
+import 'package:college360/screen/admin_screens/adminAddAdv_screen.dart';
+import 'package:college360/screen/admin_screens/admin_screen.dart';
 import 'package:college360/screen/forgotPassword_screen.dart';
 
 import 'package:college360/screen/search_screen.dart';
@@ -46,11 +47,14 @@ class College360 extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        //default design data
         theme: ThemeData.dark().copyWith(
             primaryColor: KMainCardBackGroundColor,
             textTheme: const TextTheme(
-                bodyText2: TextStyle(color: Colors.white),
-                bodyText1: TextStyle(color: Colors.white))),
+                bodyText2:
+                    TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
+                bodyText1:
+                    TextStyle(color: Colors.white, fontFamily: 'OpenSans'))),
 
         initialRoute: Wrapper.id,
         routes: {
@@ -64,6 +68,7 @@ class College360 extends StatelessWidget {
           AdminPage.id: (context) => AdminPage(),
           SearchScreen.id: (context) => SearchScreen(),
           ProfilePage.id: (context) => ProfilePage(),
+          AdminAddAdv.id: (context) => AdminAddAdv(),
         },
         // initialRoute: '/',
         // routes: {'/': (context) => HomeScreen()},

@@ -1,4 +1,4 @@
-import 'package:college360/screen/admin_screen.dart';
+import 'package:college360/screen/admin_screens/admin_screen.dart';
 import 'package:college360/screen/home_screen.dart';
 import 'package:college360/screen/login_screen.dart';
 import 'package:college360/services/GlobalData.dart';

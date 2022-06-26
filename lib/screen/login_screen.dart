@@ -1,5 +1,4 @@
 import 'package:college360/screen/forgotPassword_screen.dart';
-import 'package:college360/screen/home_screen.dart';
 import 'package:college360/screen/registration_screen.dart';
 import 'package:college360/services/authentication_Service.dart';
 import 'package:college360/wrapper.dart';
@@ -144,7 +143,7 @@ class _SignInState extends State<SignIn> {
                       }
                     } on Exception catch (e) {
                       print(e);
-                      // TODO
+                      // TODO add error handling
                     }
                   },
                 ),
@@ -162,7 +161,6 @@ class _SignInState extends State<SignIn> {
                     });
                   },
                 ),
-                //todo add password recovery by email screen
                 TextButton(
                   onPressed: () async {
                     setState(() {

@@ -93,6 +93,7 @@ class _PostFeedState extends State<PostFeed> {
                           .then((value) => print('opening file'));
                     },
                     //todo for testing remove later to another section
+                    //Update BUTTON ui
                     child: CircularPercentIndicator(
                       radius: 25.0,
                       lineWidth: 5.0,
@@ -132,43 +133,40 @@ class _PostFeedState extends State<PostFeed> {
             ],
           )
         ],
+        //search bar
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(widget.screenHeight * 0.10),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, SearchScreen.id);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
-                      primary: Colors.transparent,
-                      padding: EdgeInsets.all(10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: KBorderRadius,
-                        side: BorderSide(color: Colors.grey),
-                      )),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search,
-                        color: KActionColor,
-                        size: 25,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Looking for some notes, a friend ...',
-                          style: TextStyle(color: Colors.white54),
-                        ),
-                      )
-                    ],
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, SearchScreen.id);
+              },
+              style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  primary: Colors.transparent,
+                  padding: EdgeInsets.all(10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: KBorderRadius,
+                    side: BorderSide(color: Colors.grey),
+                  )),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: KActionColor,
+                    size: 25,
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Looking for some notes, a friend ...',
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                  )
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -333,6 +331,7 @@ class _PostFeedState extends State<PostFeed> {
                                           SizedBox(
                                             width: 5,
                                           ),
+                                          //comment counter
                                           AnimatedFlipCounter(
                                             value: widget
                                                 .post[index].commentNumber,
@@ -450,8 +449,7 @@ class _PostFeedState extends State<PostFeed> {
     final file = await downloadFile(url, fileName!)
         .whenComplete(() => showSnackBar('download complete', context));
     if (file == null) return;
-    //todo remove after testing
-    print('path: ${file.path}');
+
     OpenFile.open(file.path);
   }
 

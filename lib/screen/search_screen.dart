@@ -37,7 +37,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (value.isEmpty) {
                     searchResult.clear();
                   }
-                  //todo add search
                   if (value.isNotEmpty)
                     result = await DatabaseService().userSearch(value);
                   setState(() {

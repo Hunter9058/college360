@@ -93,7 +93,7 @@ class _AddPostState extends State<AddPost> {
                     ),
                   ),
                   SizedBox(
-                    width: 75,
+                    width: 90,
                     height: 50,
                     child: SignButton(
                         label: 'Post',

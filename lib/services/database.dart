@@ -12,6 +12,7 @@ class DatabaseService {
   DatabaseService({this.uid = ''});
 
   //shortcut for referencing user collection
+  final _currentUserUid = FirebaseAuth.instance.currentUser!.uid;
   final CollectionReference usersInfo =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference postInfo =
@@ -112,6 +113,23 @@ class DatabaseService {
     });
   }
 
+  void addAdvertisement(String companyName, String companyProfilePic,
+      String subject, List<String> advUrl) {
+    postInfo.add({
+      'bookmarks': [''],
+      'comment_count': 0,
+      'content': advUrl,
+      'date': Timestamp.now(),
+      'isAdv': true,
+      'keywords': [''],
+      'likes': [''],
+      'poster_name': companyName,
+      'poster_picture': companyProfilePic,
+      'poster_uid': _currentUserUid,
+      'subject': subject,
+    });
+  }
+
 //first get data from database
 
   //get current user data
@@ -146,9 +164,10 @@ class DatabaseService {
     });
   }
 
-  void uploadApkDownloadLink(String downloadLink, dynamic context) {
+  void uploadApkDownloadLink(
+      String downloadLink, dynamic context, String linkUploadLocation) {
     FirebaseFirestore.instance
-        .collection('app_apk')
+        .collection(linkUploadLocation)
         .doc('D2smp4WuBfTnOPdgklz6')
         .set(
       {'download_link': downloadLink},
@@ -180,6 +199,7 @@ class DatabaseService {
             .orderBy('firstName')
             .where('firstName', isGreaterThanOrEqualTo: query)
             .where('firstName', isLessThanOrEqualTo: query + '\uf8ff')
+            //convert data from json to USER class
             .withConverter<UserModel>(
                 fromFirestore: ((snapshot, _) =>
                     UserModel.fromFireStore(snapshot, _)),
