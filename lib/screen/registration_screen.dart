@@ -11,7 +11,7 @@ import 'package:college360/components/C_login_registration.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:college360/services/authentication_Service.dart';
 
-import '../miniFunctions.dart';
+import '../utilityFunctions.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';

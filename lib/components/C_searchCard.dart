@@ -35,7 +35,7 @@ class _SearchCardState extends State<SearchCard> {
                 margin: EdgeInsets.only(top: 5, left: 8, right: 8),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  gradient: KCardTopColor,
+                  gradient: KCardGradiantColor,
                 ),
                 child: Center(
                   child: ElevatedButton(

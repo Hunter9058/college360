@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import '../constant.dart';
 import '../screen/expandedImage_screen.dart';
+import '../utilityFunctions.dart';
 
 class PhotoGrid extends StatefulWidget {
   final int maxImages;
@@ -24,24 +26,16 @@ class _PhotoGridState extends State<PhotoGrid> {
   @override
   Widget build(BuildContext context) {
     var images = buildImages();
-    int r_c_Count = widget.imageUrls.length == 1 ? 1 : 2;
+    int rCCount = widget.imageUrls.length == 1 ? 1 : 2;
     return ClipRRect(
       //round image container border
 
       borderRadius: BorderRadius.circular(20.0),
       child: GridView.count(
         physics: NeverScrollableScrollPhysics(),
-        crossAxisCount: r_c_Count,
+        crossAxisCount: rCCount,
         crossAxisSpacing: 2,
         mainAxisSpacing: 2,
-
-        // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        //   //width
-        //   crossAxisSpacing: 2,
-        //   mainAxisSpacing: 2,
-        //   maxCrossAxisExtent: (MediaQuery.of(context).size.height * 0.36),
-        //   mainAxisExtent: MediaQuery.of(context).size.width * 0.32,
-        // ),
         children: images,
       ),
     );
@@ -60,8 +54,14 @@ class _PhotoGridState extends State<PhotoGrid> {
         // If no more are remaining return a simple image widget
         if (remaining == 0) {
           return GestureDetector(
-            child: Image.network(
-              imageUrl,
+            child: CachedNetworkImage(
+              errorWidget: (context, url, error) => (Icon(
+                Icons.error_outline_rounded,
+                color: Colors.grey,
+                size: 30,
+              )),
+              placeholder: (context, url) => CustomCircularProgressIndicator(),
+              imageUrl: imageUrl,
               fit: BoxFit.fill,
             ),
             onTap: () {
@@ -79,7 +79,17 @@ class _PhotoGridState extends State<PhotoGrid> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.network(imageUrl, fit: BoxFit.fill),
+                CachedNetworkImage(
+                  errorWidget: (context, url, error) => (Icon(
+                    Icons.error_outline_rounded,
+                    color: Colors.grey,
+                    size: 30,
+                  )),
+                  placeholder: (context, url) =>
+                      CustomCircularProgressIndicator(),
+                  imageUrl: imageUrl,
+                  fit: BoxFit.fill,
+                ),
                 Positioned.fill(
                   child: Container(
                     alignment: Alignment.center,
@@ -98,8 +108,14 @@ class _PhotoGridState extends State<PhotoGrid> {
         return GestureDetector(
           child: Hero(
             tag: imageUrl,
-            child: Image.network(
-              imageUrl,
+            child: CachedNetworkImage(
+              errorWidget: (context, url, error) => (Icon(
+                Icons.error_outline_rounded,
+                color: Colors.grey,
+                size: 30,
+              )),
+              placeholder: (context, url) => CustomCircularProgressIndicator(),
+              imageUrl: imageUrl,
               fit: BoxFit.fill,
             ),
           ),

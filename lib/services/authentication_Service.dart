@@ -1,5 +1,5 @@
 import 'package:college360/constant.dart';
-import 'package:college360/miniFunctions.dart';
+import 'package:college360/utilityFunctions.dart';
 import 'package:college360/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:college360/models/user.dart';

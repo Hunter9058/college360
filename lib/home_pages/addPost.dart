@@ -1,6 +1,6 @@
 import 'package:college360/components/C_login_registration.dart';
 import 'package:college360/constant.dart';
-import 'package:college360/miniFunctions.dart';
+import 'package:college360/utilityFunctions.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +122,7 @@ class _AddPostState extends State<AddPost> {
                               IconButton(
                                 iconSize: 100,
                                 onPressed: () async {
-                                  notesImages = await pickMultiNotes(context);
+                                  notesImages = await pickFiles(context);
                                   setState(() {});
                                   print(notesImages);
                                 },

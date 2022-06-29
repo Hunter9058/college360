@@ -2,6 +2,7 @@ import 'package:college360/home_pages/addPost.dart';
 import 'package:college360/home_pages/profile.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/user.dart';
+import 'package:college360/screen/about_screen.dart';
 import 'package:college360/screen/admin_screens/adminAddAdv_screen.dart';
 import 'package:college360/screen/admin_screens/admin_screen.dart';
 import 'package:college360/screen/forgotPassword_screen.dart';
@@ -26,7 +27,7 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp();
-  return runApp(College360());
+  runApp(College360());
 }
 
 class College360 extends StatelessWidget {
@@ -69,6 +70,7 @@ class College360 extends StatelessWidget {
           SearchScreen.id: (context) => SearchScreen(),
           ProfilePage.id: (context) => ProfilePage(),
           AdminAddAdv.id: (context) => AdminAddAdv(),
+          AboutScreen.id: (context) => AboutScreen(),
         },
         // initialRoute: '/',
         // routes: {'/': (context) => HomeScreen()},

@@ -11,6 +11,7 @@ import '../../components/C_searchCard.dart';
 import '../../constant.dart';
 import '../../models/user.dart';
 import '../../services/firebase_storage.dart';
+import '../../utilityFunctions.dart';
 import '../../wrapper.dart';
 import 'adminAddAdv_screen.dart';
 
@@ -21,8 +22,7 @@ class AdminPage extends StatefulWidget {
   State<AdminPage> createState() => _AdminPageState();
 }
 
-class _AdminPageState extends State<AdminPage>
-    with SingleTickerProviderStateMixin {
+class _AdminPageState extends State<AdminPage> {
   String progress = '';
   File? file;
   UploadTask? task;
@@ -94,16 +94,6 @@ class _AdminPageState extends State<AdminPage>
                             ],
                           ),
                         ),
-                      ),
-                      ListTile(
-                        title: Text('Change user admin status'),
-                        onTap: () {},
-                      ),
-                      ListTile(
-                        title: const Text('Item 2'),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
                       ),
 
                       //logout button
@@ -257,6 +247,27 @@ class _AdminPageState extends State<AdminPage>
                             },
                             child: Text('Add Advertisement',
                                 style: TextStyle(
+                                    color: Colors.white, fontSize: 18))),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                elevation: 6,
+                                side: BorderSide(color: KActionColor),
+                                primary: Color(0xff1c1c1e),
+                                minimumSize: Size(screenWidth, 60),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: KBorderRadius)),
+                            onPressed: () async {
+                              //pick image
+                              var announcement = await pickFiles(context);
+                              //upload image
+                              var downloadUrl =
+                                  await uploadAnnouncement(announcement[0]);
+                              DatabaseService().addExamTimetable(
+                                  downloadUrl, 'lvl_4', context);
+                            },
+                            child: Text('Add Exam Timetable',
+                                style: TextStyle(
                                     color: Colors.white, fontSize: 18)))
                       ],
                     ),
@@ -291,6 +302,18 @@ class _AdminPageState extends State<AdminPage>
     final urlDownload = await snapshot.ref.getDownloadURL();
     DatabaseService()
         .uploadApkDownloadLink(urlDownload, context, 'D2smp4WuBfTnOPdgklz6');
+  }
+
+  Future uploadAnnouncement(imageToUpload) async {
+    final file = File(imageToUpload!.path);
+    final path = 'lvl4/${basename(file.path)}';
+    final ref = FirebaseStorage.instance.ref().child(path);
+    var uploadTask = ref.putFile(file);
+    final snapshot = await uploadTask.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+    //todo remove after testing
+    print('Download Link: $urlDownload');
+    return urlDownload;
   }
 }
 

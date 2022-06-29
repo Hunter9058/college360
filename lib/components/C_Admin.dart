@@ -3,13 +3,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import '../constant.dart';
-import '../miniFunctions.dart';
+import '../utilityFunctions.dart';
 
 showAdminAlertDialog(BuildContext context, bool adminStatus, String userUid) {
   // Create AlertDialog
   AlertDialog alert = AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-    title: Text("Conformation"),
+    title: Text("conformation"),
     content: Text(adminStatus
         ? 'these user is already and Admin'
         : 'upgrade user to Admin'),

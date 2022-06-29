@@ -6,7 +6,7 @@ const KBackGroundColor = Color(0xff1c1c1e);
 const KMainCardBackGroundColor = Color(0xffF7DE3A); //primary color
 const KActionColor = Color(0xffeae648);
 const KSecondaryColor = Color(0xff283238);
-const KCardTopColor = LinearGradient(
+const KCardGradiantColor = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [

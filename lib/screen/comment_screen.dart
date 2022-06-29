@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:college360/models/comment.dart';
 import 'package:college360/models/user.dart';
 import 'package:college360/services/database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,13 +78,26 @@ class _CommentState extends State<Comment> {
                               children: [
                                 Row(
                                   children: [
-                                    CircleAvatar(
-                                      backgroundColor: Colors.grey,
-                                      radius: 20,
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            comment[index].commenterPic),
-                                        radius: 19,
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: comment[index].commenterPic,
+                                          placeholder: (context, _) => Icon(
+                                            CupertinoIcons.person_alt_circle,
+                                            color: Colors.white70,
+                                            size: 40,
+                                          ),
+                                          errorWidget: (context, _, error) =>
+                                              Icon(
+                                            CupertinoIcons.person_alt_circle,
+                                            color: Colors.white70,
+                                            size: 40,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(

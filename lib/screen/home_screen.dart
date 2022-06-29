@@ -1,4 +1,4 @@
-import 'package:college360/home_pages/testPage.dart';
+import 'package:college360/home_pages/chat_screen.dart';
 import 'package:college360/models/post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final screens = [
       PostFeed(
           post: post, screenWidth: screenWidth, screenHeight: screenHeight),
-      Test(),
+      ChatMain(),
       Text('screen 3'),
       ProfilePage(
         userUid: FirebaseAuth.instance.currentUser!.uid,
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
               type: BottomNavigationBarType.fixed,
               currentIndex: _selectedIndex,
               onTap: _onItemTapped,
-              iconSize: 30,
+              iconSize: 25,
               showSelectedLabels: false,
               unselectedItemColor: Colors.white,
               showUnselectedLabels: false,

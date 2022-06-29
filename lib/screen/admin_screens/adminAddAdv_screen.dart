@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../miniFunctions.dart';
+import '../../utilityFunctions.dart';
 
 class AdminAddAdv extends StatefulWidget {
   static const String id = 'AdminAddAdv';
@@ -26,6 +26,7 @@ class _AdminAddAdvState extends State<AdminAddAdv> {
   String companyName = '';
   String subject = '';
   String advLink = '';
+  String bannerLink = '';
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -83,7 +84,7 @@ class _AdminAddAdvState extends State<AdminAddAdv> {
                               backgroundColor: Colors.grey,
                               onPressed: () async {
                                 profilePic = await pickImage(context);
-                                var result = await uploadAdvProfile();
+                                var result = await uploadAdvImage(profilePic);
 
                                 setState(() {
                                   advLink = result;
@@ -164,8 +165,12 @@ class _AdminAddAdvState extends State<AdminAddAdv> {
                                 IconButton(
                                   iconSize: 100,
                                   onPressed: () async {
-                                    advBanner = await pickMultiNotes(context);
-                                    setState(() {});
+                                    advBanner = await pickFiles(context);
+                                    var result =
+                                        await uploadAdvImage(advBanner);
+                                    setState(() {
+                                      bannerLink = result;
+                                    });
                                   },
                                   icon: Icon(
                                     CupertinoIcons.plus_circled,
@@ -211,7 +216,9 @@ class _AdminAddAdvState extends State<AdminAddAdv> {
                 ElevatedButton(
                     onPressed: () {
                       DatabaseService().addAdvertisement(
-                          companyName, advLink, subject, ['sdsdsd']);
+                          companyName, advLink, subject, [bannerLink]);
+                      Navigator.pop(context);
+                      showSnackBar('the Ad has bee posted', context);
                     },
                     child: Text(
                       'Post Advertisement',
@@ -223,7 +230,7 @@ class _AdminAddAdvState extends State<AdminAddAdv> {
                         primary: KActionColor,
                         minimumSize: Size(screenWidth, 45),
                         shape: RoundedRectangleBorder(
-                            borderRadius: KBorderRadius)))
+                            borderRadius: KBorderRadius))),
               ],
             ),
           ),
@@ -232,14 +239,15 @@ class _AdminAddAdvState extends State<AdminAddAdv> {
     );
   }
 
-  Future uploadAdvProfile() async {
-    final file = File(profilePic!.path);
+  Future uploadAdvImage(imageToUpload) async {
+    final file = File(imageToUpload!.path);
     final path = 'advertisement/$_currentUserUid/${basename(file.path)}';
     final ref = FirebaseStorage.instance.ref().child(path);
     uploadTask = ref.putFile(file);
 
     final snapshot = await uploadTask!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
+    //todo remove after testing
     print('Download Link: $urlDownload');
     return urlDownload;
   }

@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college360/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import '../miniFunctions.dart';
+import '../components/C_profilePageNavMenu.dart';
+import '../utilityFunctions.dart';
 import '../models/user.dart';
 import '../services/database.dart';
 import '../services/firebase_storage.dart';
@@ -11,8 +13,8 @@ import '../services/firebase_storage.dart';
 class ProfilePage extends StatefulWidget {
   static const String id = 'profile';
   const ProfilePage({this.userUid = ''});
-
   final userUid;
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -29,6 +31,54 @@ class _ProfilePageState extends State<ProfilePage> {
             if (snapshot.hasData) {
               return Scaffold(
                 backgroundColor: KBackGroundColor,
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                  titleSpacing: 15,
+                  automaticallyImplyLeading: false,
+                  toolbarHeight: 70,
+                  elevation: 0,
+                  // appTitle(),
+
+                  backgroundColor: Colors.transparent, //app bar color
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: IconButton(
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (BuildContext context) {
+                                double screenWidth =
+                                    MediaQuery.of(context).size.width;
+                                double screenHeight =
+                                    MediaQuery.of(context).size.height;
+                                return Container(
+                                  height: screenHeight * 0.50,
+                                  width: screenWidth,
+                                  decoration: BoxDecoration(
+                                    color: KBackGroundColor,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(16.0),
+                                      topRight: Radius.circular(16.0),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: BottomNavMenu(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          icon: Icon(
+                            Icons.menu,
+                            color: Colors.white,
+                            size: 30,
+                          )),
+                    ),
+                  ],
+                ),
                 body: Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -64,10 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 10),
                           child: Row(
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {}, child: Text('Friends'))
-                            ],
+                            children: [],
                           ),
                         ),
                       )
@@ -118,7 +165,8 @@ class _TopCoverState extends State<TopCover> {
                 radius: profileHeight / 2,
                 //user profile pic
 
-                backgroundImage: NetworkImage(widget.userProfilePic),
+                backgroundImage:
+                    CachedNetworkImageProvider(widget.userProfilePic),
               ),
             ),
           ),

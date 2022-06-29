@@ -60,7 +60,7 @@ class _KeywordContainerState extends State<KeywordContainer> {
             bottomRight: Radius.circular(30),
             topLeft: Radius.circular(30),
             bottomLeft: Radius.circular(30))),
-        gradient: KCardTopColor,
+        gradient: KCardGradiantColor,
       ),
       child: Padding(
         padding: const EdgeInsets.only(
@@ -74,12 +74,14 @@ class _KeywordContainerState extends State<KeywordContainer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10, left: 10),
+              padding: const EdgeInsets.only(
+                top: 10,
+              ),
               //swipe to change photo / keyword
               child: Container(
                 //todo edit for responsiveness
                 width: screenWidth,
-                height: screenHeight * 0.36,
+                height: screenHeight * 0.38,
                 child: PageView(
                     physics:
                         widget.isAdv ? NeverScrollableScrollPhysics() : null,

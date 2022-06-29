@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:college360/miniFunctions.dart';
+import 'package:college360/utilityFunctions.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +12,7 @@ class DatabaseService {
   DatabaseService({this.uid = ''});
 
   //shortcut for referencing user collection
-  final _currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+  final _currentUserUid = FirebaseAuth.instance.currentUser?.uid;
   final CollectionReference usersInfo =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference postInfo =
@@ -113,6 +113,14 @@ class DatabaseService {
     });
   }
 
+  void addExamTimetable(String url, String lvl, context) {
+    FirebaseFirestore.instance
+        .collection('app_apk')
+        .doc('exam_schedule')
+        .update({lvl: url}).then(
+            (value) => showSnackBar('Exam timeTable', context));
+  }
+
   void addAdvertisement(String companyName, String companyProfilePic,
       String subject, List<String> advUrl) {
     postInfo.add({
@@ -175,15 +183,15 @@ class DatabaseService {
   }
 
 //todo optimize nullability
-  Future<String> getApkDownloadLink() async {
+  Future<String> getApkDownloadLink(documentName, fieldName) async {
     var result;
     try {
       await FirebaseFirestore.instance
           .collection('app_apk')
-          .doc('D2smp4WuBfTnOPdgklz6')
+          .doc(documentName)
           .get()
           .then((value) {
-        result = value.data()!['download_link'];
+        result = value.data()![fieldName];
       });
       return result;
     } on FirebaseException catch (e) {
