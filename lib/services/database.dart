@@ -41,6 +41,7 @@ class DatabaseService {
 
   void updateProfilePicLink(String uid, picLink) {
     usersInfo.doc(uid).update({'user_pic': picLink});
+    FirebaseAuth.instance.currentUser?.updatePhotoURL(picLink);
   }
 
   //second convert firestore data to custom object
