@@ -17,7 +17,7 @@ class PostModel {
   bool isAdv;
 
   PostModel(
-      {required this.bookmark,
+      {this.bookmark = const [],
       this.commentNumber = 0,
       required this.date,
       required this.posterName,

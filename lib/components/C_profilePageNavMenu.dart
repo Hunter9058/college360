@@ -29,7 +29,7 @@ class _BottomNavMenuState extends State<BottomNavMenu> {
         child: ListTile(
           onTap: () async {
             String downloadLink = await DatabaseService()
-                .getApkDownloadLink('D2smp4WuBfTnOPdgklz6', 'download_link');
+                .getApkDownloadLink('apk', 'download_link');
 
             openFile(
                     url: downloadLink,

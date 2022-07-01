@@ -10,4 +10,7 @@ class MyService {
   MyService._internal();
 
   UserModel? currentUser;
+  String getUserFullName() {
+    return '${currentUser?.firstName} ${currentUser?.lastName} ';
+  }
 }
