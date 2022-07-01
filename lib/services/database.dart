@@ -3,6 +3,7 @@ import 'package:college360/utilityFunctions.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../models/user.dart';
 
@@ -19,6 +20,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('posts');
   final CollectionReference bookmarksInfo =
       FirebaseFirestore.instance.collection('bookmarks');
+  final CollectionReference systemInfo =
+      FirebaseFirestore.instance.collection('system');
 
   Future updateUserData(
     String firstName,
@@ -65,6 +68,7 @@ class DatabaseService {
 
   Stream<List<PostModel>> get posts {
     //order post new to old
+    //todo add order by like count
     return postInfo
         .orderBy('date', descending: true)
         .snapshots()
@@ -115,11 +119,8 @@ class DatabaseService {
   }
 
   void addExamTimetable(String url, String lvl, context) {
-    FirebaseFirestore.instance
-        .collection('app_apk')
-        .doc('exam_schedule')
-        .update({lvl: url}).then(
-            (value) => showSnackBar('Exam timeTable', context));
+    FirebaseFirestore.instance.collection('system').doc('exam_schedule').update(
+        {lvl: url}).then((value) => showSnackBar('Exam timeTable', context));
   }
 
   void addAdvertisement(String companyName, String companyProfilePic,
@@ -175,10 +176,7 @@ class DatabaseService {
 
   void uploadApkDownloadLink(
       String downloadLink, dynamic context, String linkUploadLocation) {
-    FirebaseFirestore.instance
-        .collection(linkUploadLocation)
-        .doc('D2smp4WuBfTnOPdgklz6')
-        .set(
+    FirebaseFirestore.instance.collection(linkUploadLocation).doc('apk').set(
       {'download_link': downloadLink},
     ).then((value) => showSnackBar('upload complete', context));
   }
@@ -188,7 +186,7 @@ class DatabaseService {
     var result;
     try {
       await FirebaseFirestore.instance
-          .collection('app_apk')
+          .collection('system')
           .doc(documentName)
           .get()
           .then((value) {
@@ -223,6 +221,43 @@ class DatabaseService {
   void changeAdminStatus(String userUid, bool status) {
     usersInfo.doc(userUid).update({'admin': status});
   }
+
+  //keywords
+  Future<List<String>> getSubjectNames(String lvl) {
+    return systemInfo
+        .doc(lvl)
+        .collection('subjects')
+        .doc('subject_names')
+        .get()
+        .then((value) => List<String>.from(value.get('names')));
+  }
+
+  Future<List<String>> getChaptersNames(lvl, subject) {
+    return systemInfo
+        .doc(lvl)
+        .collection('subjects')
+        .doc(subject)
+        .get()
+        .then((value) => List<String>.from(value.get('ch1')));
+  }
+
+  // Future<List<String>> getChapterNames(String lvl, subject) async {
+  //   List<String> result = [];
+  //   List<DropdownMenuItem<String>> dropListItems = [];
+  //   systemInfo
+  //       .doc(lvl)
+  //       .collection('subjects')
+  //       .doc(subject)
+  //       .get()
+  //       .then(
+  //           (value) async => result = List<String>.from(await value.get('ch1')))
+  //       .then((value) => result.forEach((chapter) {
+  //             dropListItems
+  //                 .add(DropdownMenuItem(value: chapter, child: Text(chapter)));
+  //           }));
+  //
+  //   return dropListItems;
+  // }
 
 //end of file
 }

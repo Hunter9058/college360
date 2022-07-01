@@ -1,5 +1,6 @@
 import 'package:college360/components/C_login_registration.dart';
 import 'package:college360/constant.dart';
+import 'package:college360/services/database.dart';
 import 'package:college360/utilityFunctions.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +18,10 @@ class AddPost extends StatefulWidget {
 
 class _AddPostState extends State<AddPost> {
   List<XFile?> notesImages = [];
+
+  String? selectedChapter;
+  String? selectedSubject;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -30,6 +35,20 @@ class _AddPostState extends State<AddPost> {
           'Create Post',
           style: TextStyle(color: Colors.white70),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: SizedBox(
+              width: 70,
+              height: 50,
+              child: SignButton(
+                  label: 'Post',
+                  buttonColor: KActionColor,
+                  textColor: Colors.black,
+                  onPressed: () {}),
+            ),
+          )
+        ],
       ),
       //main container
       body: Padding(
@@ -40,67 +59,22 @@ class _AddPostState extends State<AddPost> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  cDropDownMenuBuilder(
+                      screenWidth,
+                      'subjects',
+                      DatabaseService().getSubjectNames('lvl4'),
+                      selectedSubject ?? 'mangerial accounting'),
                   SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: Material(
-                      color: KBackGroundColor,
-                      elevation: 2,
-                      borderRadius: KBorderRadius,
-                      child: DropdownButtonFormField2<String>(
-                          onChanged: (value) {},
-                          validator: (val) {
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: KBorderRadius),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: KBorderRadius,
-                              borderSide: BorderSide(color: KActionColor),
-                            ),
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                            border: OutlineInputBorder(
-                              borderRadius: KBorderRadius,
-                            ),
-                          ),
-                          isExpanded: true,
-                          hint: const Text(
-                            'Subject',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          icon: const Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.white70,
-                          ),
-                          buttonDecoration: BoxDecoration(
-                            borderRadius: KBorderRadius,
-                          ),
-                          iconSize: 30,
-                          buttonHeight: 60,
-                          buttonPadding:
-                              const EdgeInsets.only(left: 20, right: 10),
-                          dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15)),
-                          ),
-                          items: []),
-                    ),
+                    width: 30,
                   ),
-                  SizedBox(
-                    width: 90,
-                    height: 50,
-                    child: SignButton(
-                        label: 'Post',
-                        buttonColor: KActionColor,
-                        textColor: Colors.black,
-                        onPressed: () {}),
-                  )
+                  cDropDownMenuBuilder(
+                      screenWidth,
+                      'Chapters',
+                      DatabaseService().getChaptersNames(
+                          'lvl4', selectedSubject ?? 'mangerial accounting'),
+                      selectedChapter ?? 'ch1'),
                 ],
               ),
               Padding(
@@ -146,40 +120,91 @@ class _AddPostState extends State<AddPost> {
                 ),
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     'Keyword Preview',
                     style: TextStyle(fontSize: 18, color: Colors.white70),
                   ),
                   Divider(
-                    endIndent: 220,
+                    endIndent: 80,
+                    indent: 80,
                     thickness: 1.2,
                     color: Colors.white,
-                  )
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Wrap(
+                        alignment: WrapAlignment.center,
+                        runSpacing: 5,
+                        spacing: 10,
+                        children: [
+                          TestChip(label: 'math '),
+                          TestChip(label: 'OOP '),
+                          TestChip(label: 'Function '),
+                          TestChip(label: 'python '),
+                          TestChip(label: 'algorithm '),
+                          TestChip(label: 'C++ '),
+                        ]),
+                  ),
                 ],
               ),
               //chips
-              Container(
-                width: double.infinity,
-                child: Wrap(
-                    alignment: WrapAlignment.start,
-                    runSpacing: 5,
-                    spacing: 10,
-                    children: [
-                      TestChip(label: 'math '),
-                      TestChip(label: 'OOP '),
-                      TestChip(label: 'Function '),
-                      TestChip(label: 'python '),
-                      TestChip(label: 'algorithm '),
-                      TestChip(label: 'C++ '),
-                    ]),
-              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  FutureBuilder<List<String>> cDropDownMenuBuilder(double screenWidth,
+      String label, var databaseStringList, String selected) {
+    return FutureBuilder<List<String>>(
+        future: databaseStringList,
+        builder: (context, snapshot) {
+          List<String>? subject = snapshot.data;
+          return SizedBox(
+            height: 50,
+            width: screenWidth * 0.40,
+            child: Material(
+              color: KBackGroundColor,
+              elevation: 2,
+              borderRadius: KBorderRadius,
+              child: DropdownButtonFormField2(
+                isExpanded: true,
+                hint: Text(
+                  label,
+                  style: TextStyle(fontSize: 16),
+                ),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.white70,
+                ),
+                buttonDecoration: BoxDecoration(
+                  borderRadius: KBorderRadius,
+                ),
+                iconSize: 30,
+                buttonHeight: 60,
+                buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                dropdownDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15)),
+                ),
+                decoration: KDropDownDecoration,
+                value: selected,
+                onChanged: (value) {
+                  setState(() {
+                    selected = value.toString();
+                  });
+                },
+                items: subject!.map((subject) {
+                  return DropdownMenuItem(value: subject, child: Text(subject));
+                }).toList(),
+              ),
+            ),
+          );
+        });
   }
 }
 
@@ -192,7 +217,9 @@ class TestChip extends StatelessWidget {
       deleteIcon: Icon(
         CupertinoIcons.xmark_circle_fill,
       ),
-      onDeleted: () {},
+      onDeleted: () {
+        //remove chip
+      },
       deleteIconColor: Colors.black87,
       labelPadding: EdgeInsets.all(2.0),
       label: Text(

@@ -72,3 +72,17 @@ Color getUserAvatarNameColor(types.User user) {
 
 String getUserName(types.User user) =>
     '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();
+//decorations
+const InputDecoration KDropDownDecoration = InputDecoration(
+  enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.white), borderRadius: KBorderRadius),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: KBorderRadius,
+    borderSide: BorderSide(color: KActionColor),
+  ),
+  isDense: true,
+  contentPadding: EdgeInsets.zero,
+  border: OutlineInputBorder(
+    borderRadius: KBorderRadius,
+  ),
+);

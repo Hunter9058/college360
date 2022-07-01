@@ -300,8 +300,7 @@ class _AdminPageState extends State<AdminPage> {
     if (task == null) return;
     final snapshot = await task!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
-    DatabaseService()
-        .uploadApkDownloadLink(urlDownload, context, 'D2smp4WuBfTnOPdgklz6');
+    DatabaseService().uploadApkDownloadLink(urlDownload, context, 'apk');
   }
 
   Future uploadAnnouncement(imageToUpload) async {
