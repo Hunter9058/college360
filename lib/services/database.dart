@@ -38,6 +38,7 @@ class DatabaseService {
         'student-Id': id,
         'gender': gender,
         'admin': false,
+        'user_pic': '',
       },
     );
   }
