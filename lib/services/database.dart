@@ -3,7 +3,6 @@ import 'package:college360/utilityFunctions.dart';
 import 'package:college360/models/post.dart';
 import 'package:college360/models/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 import '../models/user.dart';
 
