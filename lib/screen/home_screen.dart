@@ -38,7 +38,25 @@ class _HomeScreenState extends State<HomeScreen> {
       PostFeed(
           post: post, screenWidth: screenWidth, screenHeight: screenHeight),
       ChatMain(),
-      Text('screen 3'),
+      Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.notifications_off_rounded,
+              size: 40,
+              color: Colors.white,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50, top: 10),
+              child: Text(
+                'No notifications',
+                style: TextStyle(fontSize: 20),
+              ),
+            )
+          ],
+        ),
+      ),
       ProfilePage(
         userUid: FirebaseAuth.instance.currentUser!.uid,
       ),
